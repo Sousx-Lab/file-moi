@@ -22,14 +22,14 @@ final class SecurityControllerTest extends WebTestCase
         return $this->client->getContainer()->get('router');
     }
 
-    public function test_LoginPageRoute_MustReturnSuccessfulResponse() :void
+    public function test_LoginPageRoute() :void
     {
         $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Please sign in');
     }
 
-    public function test_EmaildFieldForm_MustReturnTrue():void
+    public function test_EmaildFieldForm():void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->assertSelectorExists('form');
@@ -37,7 +37,7 @@ final class SecurityControllerTest extends WebTestCase
         $this->assertTrue($emailField);
     }
 
-    public function test_PasswordFieldForm_MustReturnTrue():void
+    public function test_PasswordFieldForm():void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->assertSelectorExists('form');
@@ -45,7 +45,7 @@ final class SecurityControllerTest extends WebTestCase
         $this->assertTrue($passwordField);
     }
 
-    public function test_CsrfdFieldForm_MustReturnTrue():void
+    public function test_CsrfdFieldForm():void
     {
         $crawler = $this->client->request('GET', '/login');
         $this->assertSelectorExists('form');
@@ -54,7 +54,7 @@ final class SecurityControllerTest extends WebTestCase
     }
 
 
-    public function test_TryLoginWithoutCredentials_MustRedirectToLoginRoute():void
+    public function test_TryLoginWithoutCredentials():void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $form = $crawler->selectButton('Sign in')
@@ -68,7 +68,7 @@ final class SecurityControllerTest extends WebTestCase
         $this->assertRegExp('/Identifiants invalides./', $this->client->getResponse()->getContent());
     }
 
-    public function test_TryLoginWithBadCredentials_MustRedirectToLoginRoute():void
+    public function test_TryLoginWithBadCredentials():void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $form = $crawler->selectButton('Sign in')
@@ -82,7 +82,7 @@ final class SecurityControllerTest extends WebTestCase
         $this->assertRegExp('/Identifiants invalides./', $this->client->getResponse()->getContent());
     }
 
-    public function test_LoginWhitGoodCredentials_MustRedirectToHomePage():void
+    public function test_LoginWhitGoodCredentials():void
     {
         $this->loadFixtureFiles([dirname(__DIR__, 1). '/users.yaml']);
         $csrfToken = $this->client->getContainer()->get('security.csrf.token_manager')->getToken('authenticate');

@@ -19,7 +19,7 @@ final class HomeControllerTest extends WebTestCase
         return $this->client->getContainer()->get('router');
     }
     
-    public function test_HomePageRoute_MustdReturnSuccesfulResponse(): void
+    public function test_HomePageRoute(): void
     {
         $this->client->request('GET', $this->UrlGenerator()->generate(self::HOMPAGE_ROUTE));
         $this->assertResponseIsSuccessful();
