@@ -10,7 +10,7 @@ class HomeController extends AbstractController
 {
 
     /**
-     * @Route("/", name="app_homepage")
+     * @Route("/", name="route_homepage")
      * @return Response
      */
     public function index(): Response

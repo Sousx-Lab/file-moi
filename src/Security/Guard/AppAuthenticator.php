@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Security;
+namespace App\Security\Guard;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +24,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    public const LOGIN_ROUTE = 'route_login';
 
     private $entityManager;
     private $urlGenerator;

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class HomeControllerTest extends WebTestCase
 {
+    private const HOMPAGE_ROUTE =  "route_homepage";
 
     private KernelBrowser $client;
 
@@ -14,9 +15,13 @@ final class HomeControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
     
-    public function test_HomePageRoute_ShouldReturnSuccesfullResponse(): void
+    public function UrlGenerator(){
+        return $this->client->getContainer()->get('router');
+    }
+    
+    public function test_HomePageRoute_MustdReturnSuccesfulResponse(): void
     {
-        $this->client->request('GET', '/');
+        $this->client->request('GET', $this->UrlGenerator()->generate(self::HOMPAGE_ROUTE));
         $this->assertResponseIsSuccessful();
     }
 }
