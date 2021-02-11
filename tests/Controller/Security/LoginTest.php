@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Security;
 
+use App\Tests\Controller\NeedLogin;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -9,7 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 final class SecurityControllerTest extends WebTestCase
 {
     private const LOGIN_ROUTE =  "route_login";
+    private const LOGOUT_ROUTE = "route_logout";
+
     use FixturesTrait;
+    use NeedLogin;
 
     private KernelBrowser $client;
 
@@ -18,43 +22,39 @@ final class SecurityControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function UrlGenerator(){
+    public function UrlGenerator()
+    {
         return $this->client->getContainer()->get('router');
     }
 
-    public function test_LoginPageRoute() :void
+    public function test_LoginPageRoute(): void
     {
-        $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
+        $this->client->request('GET', $this->urlGenerator()->generate(self::LOGIN_ROUTE));
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Please sign in');
     }
 
-    public function test_EmaildFieldForm():void
+    public function test_LoginFormFields(): void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
-        $this->assertSelectorExists('form');
-        $emailField = $crawler->filter('input[type=email]')->matches('input[type=email]');
+        
+        $emailField = $crawler->filter('form[name=login]')
+            ->filter('input[type=email]')
+            ->matches('input[type=email]');
         $this->assertTrue($emailField);
-    }
 
-    public function test_PasswordFieldForm():void
-    {
-        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
-        $this->assertSelectorExists('form');
-        $passwordField = $crawler->filter('input[type=password]')->matches('input[type=password]');
+        $passwordField = $crawler->filter('form[name=login]')
+            ->filter('input[type=password]')
+            ->matches('input[type=password]');
         $this->assertTrue($passwordField);
-    }
-
-    public function test_CsrfdFieldForm():void
-    {
-        $crawler = $this->client->request('GET', '/login');
-        $this->assertSelectorExists('form');
-        $csrfField = $crawler->filter('input[type=hidden]')->matches('input[type=hidden]');
+        
+        $csrfField = $crawler->filter('form[name=login]')
+            ->filter('input[name=_csrf_token]')
+            ->matches('input[name=_csrf_token]');
         $this->assertTrue($csrfField);
     }
 
-
-    public function test_TryLoginWithoutCredentials():void
+    public function test_TryLoginWithoutCredentials(): void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $form = $crawler->selectButton('Sign in')
@@ -63,12 +63,13 @@ final class SecurityControllerTest extends WebTestCase
                 'password' => " ",
             ]);
         $this->client->submit($form);
+        
         $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->client->followRedirect();
         $this->assertRegExp('/Identifiants invalides./', $this->client->getResponse()->getContent());
     }
 
-    public function test_TryLoginWithBadCredentials():void
+    public function test_TryLoginWithBadCredentials(): void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $form = $crawler->selectButton('Sign in')
@@ -77,23 +78,35 @@ final class SecurityControllerTest extends WebTestCase
                 'password' => "PasswordTest",
             ]);
         $this->client->submit($form);
+
         $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->client->followRedirect();
         $this->assertRegExp('/Identifiants invalides./', $this->client->getResponse()->getContent());
     }
 
-    public function test_LoginWhitGoodCredentials():void
+    public function test_LoginWhitGoodCredentials(): void
     {
-        $this->loadFixtureFiles([dirname(__DIR__, 1). '/users.yaml']);
+        $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
         $csrfToken = $this->client->getContainer()->get('security.csrf.token_manager')->getToken('authenticate');
-        $this->client->request('POST', '/login',[
+        $this->client->request('POST', '/login', [
             'csrf_token' => $csrfToken,
             'email' => 'john@doe.fr',
             'password' => '0000',
         ]);
         $this->assertResponseRedirects("");
         $this->client->followRedirect();
+
         $this->assertRegExp('/john@doe.fr/', $this->client->getResponse()->getContent());
+    }
+
+    public function test_LogoutRoute(): void
+    {
+        $user = $this->loadFixtureFiles([dirname(__DIR__, 1). '/users.yaml']);
+        $this->login($this->client, $user['user_user']);
+        $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGOUT_ROUTE));
+
+        $this->assertResponseRedirects();
+        $this->assertNull($this->client->getContainer()->get('security.token_storage')->getToken());
     }
 
 }

@@ -40,7 +40,13 @@
 					{% endif %}
 					</div>
 				</nav>
-		<div class="container h-100"> {% block body %}{% endblock %}
+		<div class="container h-100">
+			{% for label, messages in app.flashes %}
+    			{% for message in messages %}
+       			 <div class="alert alert-{{ label }}">{{ message }} </div>
+            	{% endfor %}	
+       		{% endfor %}
+		 {% block body %}{% endblock %}
 			</div>
 			{# {{ encore_entry_script_tags('app') }} #}
 			{% block javascripts %}{% endblock %}

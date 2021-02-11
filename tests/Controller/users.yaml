@@ -3,7 +3,9 @@ App\Entity\User:
     email: "john\\@doe.fr"
     roles: "[]"
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
+    firstname: "John1"
   user_admin:
     email: "admin\\@doe.fr"
     roles: "[ROLE_ADMIN]"
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
+    firstname: "Admin"

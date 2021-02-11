@@ -1,0 +1,63 @@
+{% extends "base.html.twig" %}
+
+{% block title  %}
+	Créer un compte
+{% endblock %}
+
+{% block body %}
+	<div class="row align-items-center mt-4">
+		<div class="col-6 mx-auto ">
+         <h1 class="h3 mb-3 font-weight-normal">Sign in up</h1>
+
+    <form action={{ path('route_registration') }} method="POST" name="registration" >
+        
+        <div class="mb-3">
+             {{ form_label(form.email, 'Email :')}}
+
+            {{ form_widget(form.email, {
+                'attr': {
+                    'class': 'form-control' ~ (form.email.vars.valid ? ' ' : ' is-invalid'), 
+                    'placeholder': 'email@exemple.com'
+                    }}) 
+                }}
+                <div class="invalid-feedback  mb-3">
+                    {{ form_errors(form.email) }}
+                </div>
+        </div>
+       
+        <div calss="mb-3">
+             {{ form_label(form.password, 'Password :')}}
+
+                {{ form_widget(form.password, {
+                'attr': {
+                    'class': 'form-control' ~ (form.password.vars.valid ? ' ' : ' is-invalid'), 
+                    'placeholder': 'Your passord'
+                    }}) 
+            }}
+                <div class="invalid-feedback  mb-3">
+                    {{ form_errors(form.password) }}
+                </div>
+        </div>
+           
+        <div class="mt-3">
+            {{ form_label(form.confirmPassword, 'Confirm Password :')}}
+
+            {{ form_widget(form.confirmPassword, {
+                'attr': {
+                    'class': 'form-control' ~ (form.confirmPassword.vars.valid ? ' ' : ' is-invalid'), 
+                    'placeholder': 'Confirm your password'
+                    }}) 
+            }}
+                <div class="invalid-feedback  mb-3">
+                    {{ form_errors(form.confirmPassword) }}
+                </div>
+        </div>
+
+        {{ form_widget(form._token) }}
+
+        <button type="submit" class="btn btn-primary mt-3" >Sign in up</button>
+    </form>
+        </div>
+	</div>
+
+{% endblock %}

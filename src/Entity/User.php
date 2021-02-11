@@ -9,9 +9,11 @@ use App\Repository\UserRepository;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"email"}, message="L'adresse ne peux pas étre utilisée")
  */
 class User implements UserInterface
 {
@@ -34,8 +36,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(name="firstname", type="string", length=180, nullable=true)
      */
-    private string $firstName;
-    
+    private ?string $firstname;
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -49,10 +51,10 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Le mot de passe je peux pas être vide !")
+     * @Assert\NotBlank(message="Le mot de passe ne peux pas être vide !")
      * @Assert\Length(min=8, minMessage="Le mot de passe doit comporter au moins 8 caractères")
-     * @Assert\Regex(pattern= "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", match=false, 
-     * message="Le mot de passe doit comporter au moins une lettre majuscule, une miniscule et un chiffre")
+     * @Assert\Regex(pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/i", 
+     *         message="Le mot de passe doit comporter au moins une lettre majuscule, une miniscule et un chiffre")
      */
     private $password;
 
@@ -63,8 +65,9 @@ class User implements UserInterface
      */
     private $confirmPassword;
 
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->id = Uuid::uuid4();
     }
 
@@ -147,26 +150,25 @@ class User implements UserInterface
 
     /**
      * Get the value of username
-     */ 
-    public function getFirstName(): ?string
+     */
+    public function getFirstname(): ?string
     {
-        return $this->firstName;
+        return $this->firstname;
     }
 
     /**
      * Set the value of username
-     * @returnself
-     */ 
-    public function setFirstName($firstname): self
+     * @return self|null
+     */
+    public function setFirstname(?string $firstname): ?self
     {
-        $this->firstName = $firstname;
-
+        $this->firstname = $firstname;
         return $this;
     }
 
     /**
      * Get the value of createAt
-     */ 
+     */
     public function getCreateAt(): ?\DateTimeInterface
     {
         return $this->createAt;
@@ -175,8 +177,8 @@ class User implements UserInterface
     /**
      * Set the value of createAt
      * @return self
-     */ 
-    public function setCreateAt(? \DateTimeInterface $timestamp): self
+     */
+    public function setCreateAt(?\DateTimeInterface $timestamp): self
     {
         $this->createAt = $timestamp;
         return $this;
@@ -186,26 +188,25 @@ class User implements UserInterface
      * ORM\PrePersist
      * @return void
      */
-    public function setCreatedAtAuto()
+    public function setCreatedAtAuto(): void
     {
-        if(null === $this->getCreateAt())
-        {
+        if (null === $this->getCreateAt()) {
             $this->setCreateAt(new \DateTime());
         }
     }
 
     /**
-     * @return string|null
-     */ 
-    public function getConfirmPassword(): ?string
+     * @return string
+     */
+    public function getConfirmPassword(): string
     {
         return $this->confirmPassword;
     }
 
     /**
      * @return self
-     */ 
-    public function setConfirmPassword(string $confirmPassword):self
+     */
+    public function setConfirmPassword(string $confirmPassword): self
     {
         $this->confirmPassword = $confirmPassword;
         return $this;
