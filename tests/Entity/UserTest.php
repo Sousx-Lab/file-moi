@@ -3,6 +3,9 @@ namespace App\Tests\Entity;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 ;
@@ -10,31 +13,42 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 final class UserTest extends KernelTestCase
 {
     use FixturesTrait;
-    public function test_ValidUserEntity() :void
+    private EntityManagerInterface $em;
+
+    protected function setUp(): void
     {
         self::bootKernel();
-        
-        $user = (new User())
-            ->setEmail('john@doe.fr')
-            ->setFirstname('John');
+        $this->em = self::$container->get('doctrine.orm.default_entity_manager');
+        $purger = new ORMPurger($this->em);
+        $purger->purge();    
+    }
+
+    private function getEntity(): User
+    {
+        return (new User())
+        ->setEmail('john@doe.fr')
+        ->setFirstname('John')
+        ->setPassword('UserTestPassword1')
+        ->setConfirmPassword('UserTestPassword1');
+    }
+    
+    public function test_ValidUserEntity() :void
+    {        
+        $user = $this->getEntity();
         $user->setPassword('UserTestPassword1');
         $user->setConfirmPassword('UserTestPassword1');
 
         $this->assertInstanceOf(User::class, $user);
         
         $error = self::$container->get('validator')->validate($user);
-
         $this->assertCount(0, $error);
     }
 
     public function test_UserUniqueUsername(): void
     {
-        self::bootKernel();
         $this->loadFixtureFiles([dirname(__DIR__, 1). '/Controller/users.yaml']);
 
-        $user = (new User())
-            ->setEmail('john@doe.fr')
-            ->setFirstname('John');
+        $user = $this->getEntity();
         $user->setPassword('UserTestPassword1');
         $user->setConfirmPassword('UserTestPassword1');
 
@@ -44,10 +58,7 @@ final class UserTest extends KernelTestCase
 
     public function test_UserWithBadPasswordFormat(): void
     {
-        self::bootKernel();
-        $user = (new User())
-            ->setEmail('john@doe.fr')
-            ->setFirstname('John');
+        $user = $this->getEntity();
         //Minimum length test
         $user->setPassword('Pass2');
         $user->setConfirmPassword('Pass2');
@@ -69,11 +80,7 @@ final class UserTest extends KernelTestCase
 
     public function test_CreatedAtOnPrePersist(): void
     {
-        self::bootKernel();
-
-        $user = (new User())
-            ->setEmail('john@doe.fr')
-            ->setFirstname('John');
+        $user = $this->getEntity();
         $user->setPassword('UserTestPassword1');
         $user->setConfirmPassword('UserTestPassword1');
         self::$container->get('doctrine.orm.default_entity_manager')->persist($user);
@@ -84,7 +91,6 @@ final class UserTest extends KernelTestCase
 
     public function test_UpdateAtOnPreUpdate(): void
     {
-        self::bootKernel();
         $this->loadFixtureFiles([dirname(__DIR__, 1). '/Controller/users.yaml']);
 
         /**@var User|null */
