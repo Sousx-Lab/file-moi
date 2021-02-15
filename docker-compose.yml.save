@@ -6,7 +6,7 @@ services:
     container_name: mysql
     volumes:
       - db_data:/var/lib/mysql
-    restart: 'no'
+    restart: no
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: root
@@ -18,22 +18,13 @@ services:
     expose:
       - '3306'
 
-  mailhog:
+ 	mailhog:
     image: mailhog/mailhog
-    container_name: mailhog
-    restart: 'no'
     logging:
       driver: 'none'  # disable saving logs
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
 
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: 'no'
-    ports:
-      - 9000:8080
- 
 volumes:
   mysqldata:

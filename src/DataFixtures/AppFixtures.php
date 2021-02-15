@@ -14,6 +14,7 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordEncoderInterface $userPasswordEncoder) {
         $this->passwordEncoder = $userPasswordEncoder;
     }
+    
     public function load(ObjectManager $manager)
     {
         for($i = 0; $i <= 5; $i++)

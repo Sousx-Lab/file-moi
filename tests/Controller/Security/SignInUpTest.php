@@ -14,6 +14,7 @@ final class SignInUpTest extends WebTestCase
     
     use FixturesTrait;
     use NeedLogin;
+    
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -75,5 +76,5 @@ final class SignInUpTest extends WebTestCase
         $this->client->followRedirect();
         $this->assertRegExp('/You are already logged in as much as : John1/', $this->client->getResponse()->getContent());
        
-    }    
+    }
 }

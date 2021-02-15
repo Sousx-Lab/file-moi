@@ -3,10 +3,10 @@
 namespace App\Entity;
 
 use Ramsey\Uuid\Uuid;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use SebastianBergmann\Type\VoidType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="L'adresse ne peux pas étre utilisée")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
@@ -39,9 +40,14 @@ class User implements UserInterface
     private ?string $firstname;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private ?\DateTimeInterface $createAt = null;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private \DateTimeInterface $createAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     /**
      * @ORM\Column(type="json")
@@ -53,7 +59,7 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Le mot de passe ne peux pas être vide !")
      * @Assert\Length(min=8, minMessage="Le mot de passe doit comporter au moins 8 caractères")
-     * @Assert\Regex(pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/i", 
+     * @Assert\Regex(pattern="/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])/", 
      *         message="Le mot de passe doit comporter au moins une lettre majuscule, une miniscule et un chiffre")
      */
     private $password;
@@ -169,7 +175,7 @@ class User implements UserInterface
     /**
      * Get the value of createAt
      */
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreateAt(): \DateTimeInterface
     {
         return $this->createAt;
     }
@@ -178,20 +184,52 @@ class User implements UserInterface
      * Set the value of createAt
      * @return self
      */
-    public function setCreateAt(?\DateTimeInterface $timestamp): self
+    public function setCreateAt(\DateTimeInterface $timestamp): self
     {
         $this->createAt = $timestamp;
         return $this;
     }
 
     /**
-     * ORM\PrePersist
+     * Set createdAt value on pre persistence
+     * @ORM\PrePersist
      * @return void
      */
-    public function setCreatedAtAuto(): void
+    public function onPrePersist(): void
     {
-        if (null === $this->getCreateAt()) {
-            $this->setCreateAt(new \DateTime());
+        if (null === $this->createAt) {
+            $this->setCreateAt(new \DateTime('now'));
+        }
+    }
+
+    /**
+     * Get the value of updatedAt
+     * @return \DateTimeInterface|null
+     */
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * set value to updatedAt
+     * @return self
+     */
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * Set updatedAt value on pre updated
+     * @ORM\PreUpdate
+     * @return void
+     */
+    public function onPreUpdate(): void
+    {
+        if (null === $this->updatedAt) {
+            $this->setUpdatedAt(new \DateTime('now'));
         }
     }
 
