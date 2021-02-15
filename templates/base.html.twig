@@ -31,11 +31,13 @@
 							<span class="text-light">{{app.user.firstname ? app.user.firstname : app.user.email}} </span>
 						</li>
 						<li class="">
-							<a class="" href={{ path ('route_logout') }}>Se déconnecter</a>
+							<a class="" href={{ path ('route_logout') }}>Logout</a>
 						</li>
 					{% else %}
 						<li class="">
-							<a href={{ path ('route_login') }} class="">Se connecter</a>
+							<a href={{ path ('route_login') }} class="">Login</a>
+							<span class="text-light ml-2 mr-2"> | </span>
+							<a class="" href={{ path ('route_registration') }}>Sign Up</a>
 						</li>
 					{% endif %}
 					</div>

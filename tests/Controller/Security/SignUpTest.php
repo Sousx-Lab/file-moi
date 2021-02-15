@@ -6,7 +6,7 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class SignInUpTest extends WebTestCase 
+final class SignUpTest extends WebTestCase 
 {
 
     private const REGISTRATION_ROUTE = "route_registration";
@@ -14,7 +14,7 @@ final class SignInUpTest extends WebTestCase
     
     use FixturesTrait;
     use NeedLogin;
-    
+
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -32,34 +32,40 @@ final class SignInUpTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function getRegistrationForm()
+    {
+        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
+        return $crawler->filter('form[name=registration]');
+    }
+
     public function test_RegistrationFormFields():void
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
 
-        $form = $crawler->filter('form[name=registration]')->matches('form[name=registration]');
+        $form = $this->getRegistrationForm()->matches('form[name=registration]');
         $this->assertTrue($form);
 
-        $emailField = $crawler->filter('form[name=registration]')
+        $emailField = $this->getRegistrationForm()
             ->filter('input[type=email]')
             ->matches('input[type=email]');
         $this->assertTrue($emailField);
 
-        $passwordField = $crawler->filter('form[name=registration]')
+        $passwordField = $this->getRegistrationForm()
             ->filter('input[type=password]')
             ->matches('input[type=password]');
         $this->assertTrue($passwordField);
         
-        $confirmPasswordField = $crawler->filter('form[name=registration]')
+        $confirmPasswordField = $this->getRegistrationForm()
             ->filter('input[type=password]')
             ->matches('input[type=password]');
         $this->assertTrue($confirmPasswordField);
 
-        $csrfTokenField = $crawler->filter('form[name=registration]')
+        $csrfTokenField = $this->getRegistrationForm()
             ->filter('input[name="registration[_token]" ]')
             ->matches('input[name="registration[_token]" ]');
         $this->assertTrue($csrfTokenField);
 
-        $formElem = $crawler->filter('form[name=registration]')
+        $formElem = $this->getRegistrationForm()
                 ->filterXPath('//input[contains(@name, "registration")]')->evaluate('substring-after(@name, "registration")');
 
         $this->assertTrue($formElem === ['[email]', '[password]', '[confirmPassword]', '[_token]']);
