@@ -4,12 +4,14 @@ namespace App\Controller\Security;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use App\Messenger\Message\UserNotificationMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -38,14 +40,14 @@ class SecurityController extends AbstractController
      * @Route("/registration", name="route_registration")
      * @return Response
      */
-    public function registration(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $em): Response
+    public function registration(Request $request, 
+        UserPasswordEncoderInterface $encoder, 
+        EntityManagerInterface $em,
+        MessageBusInterface $messageBus): Response
     {
 
         if (null !== $user = $this->getUser()) {
             $this->addFlash('info', 'You are already logged in as much as : ' . $user->getFirstname() ?? $user->getUsername());
-            if($referer = $request->headers->get('referer')){
-                return new RedirectResponse($referer);
-            }
             return $this->redirectToRoute('route_homepage');
         }
 
@@ -58,8 +60,13 @@ class SecurityController extends AbstractController
             $user->setPassword($password);
             $em->persist($user);
             $em->flush();
-
+            
+            $messageBus->dispatch(new UserNotificationMessage($user->getId(), [
+                'subject' => 'Account created',
+                'message' =>  'Your account has been created successfully'
+            ]));
             $this->addFlash('success', 'Your account has been created successfully');
+            return $this->redirectToRoute('route_login');
         }
         return $this->render("security/registration.html.twig", [
             'form' => $form->createView()

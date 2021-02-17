@@ -7,7 +7,7 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class SecurityControllerTest extends WebTestCase
+final class LoginTest extends WebTestCase
 {
     private const LOGIN_ROUTE =  "route_login";
     private const LOGOUT_ROUTE = "route_logout";
