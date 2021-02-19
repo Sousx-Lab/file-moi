@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Messenger\MessageHandler;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Messenger\Message\UserNotificationMessage;
+use App\Messenger\MessageHandler\HandlerExceptions\UserNotFoundException;
 use App\Services\Notifications\UserNotifierService;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class UserNotificationHandler implements MessageHandlerInterface
@@ -13,17 +16,19 @@ class UserNotificationHandler implements MessageHandlerInterface
 
     private UserNotifierService $notifierService;
 
-    public function __construct(EntityManagerInterface $em, UserNotifierService $notifierService) {
+    public function __construct(EntityManagerInterface $em, UserNotifierService $notifierService)
+    {
         $this->em = $em;
         $this->notifierService = $notifierService;
     }
 
     public function __invoke(UserNotificationMessage $message)
     {
-       $user = $this->em->find(User::class, $message->getUserId());
-       $emailData = $message->getEmailData();
-       if(null !== $user){
-           $this->notifierService->notify($user, $emailData);
-       }
+        $user = $this->em->find(User::class, $message->getUserId());
+        $emailData = $message->getEmailData();
+        if (null !== $user) {
+            $this->notifierService->notify($user, $emailData);
+        }
+        throw new UserNotFoundException("User id : " . $message->getUserId() . " not found");
     }
 }

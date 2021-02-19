@@ -53,9 +53,10 @@ class SecurityController extends AbstractController
 
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
-
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+
+        if ($form->isSubmitted() && $this->isCsrfTokenValid('register-user', $request->get('token')) ) {
+            
             $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
             $em->persist($user);
@@ -65,6 +66,7 @@ class SecurityController extends AbstractController
                 'subject' => 'Account created',
                 'message' =>  'Your account has been created successfully'
             ]));
+    
             $this->addFlash('success', 'Your account has been created successfully');
             return $this->redirectToRoute('route_login');
         }

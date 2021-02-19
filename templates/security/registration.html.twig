@@ -53,8 +53,8 @@
                 </div>
         </div>
 
-        {{ form_widget(form._token) }}
-
+        <input type="hidden" id="register_token" name="token" value="{{ csrf_token ('register-user') }}"/>
+        
         <button type="submit" class="btn btn-primary mt-3" >Sign in up</button>
     </form>
         </div>

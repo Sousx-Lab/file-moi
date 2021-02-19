@@ -88,7 +88,7 @@ final class LoginTest extends WebTestCase
     {
         $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
         $csrfToken = $this->client->getContainer()->get('security.csrf.token_manager')->getToken('authenticate');
-        $this->client->request('POST', '/login', [
+        $this->client->request('POST', $this->UrlGenerator()->generate(self::LOGIN_ROUTE), [
             'csrf_token' => $csrfToken,
             'email' => 'john@doe.fr',
             'password' => '0000',
