@@ -1,11 +1,25 @@
-App\Entity\User:
+App\Entity\Auth\User:
   user_user:
     email: "john\\@doe.fr"
     roles: "[]"
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
     firstname: "John1"
+    confirmationToken: ""
   user_admin:
     email: "admin\\@doe.fr"
     roles: "[ROLE_ADMIN]"
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
     firstname: "Admin"
+    confirmationToken: ""
+  user_password_reset:
+    email: "johnPasswordReset\\@doe.fr"
+    roles: "[]"
+    password: "\\$2y\\$10\\$jkv.9MSO/2U9u8.nGlzHnOZieMgnV846Sl/SA2Hiv561FdXUxaMkO"
+    firstname: "JohnToken"
+    confirmationToken: ""
+
+App\Entity\Auth\Password\PasswordResetToken:
+  token_token: 
+    createdAt: '<date_create()>'
+    token: "1N3sukqTPQvHz8xhamgK"
+    user: '@user_password_reset'

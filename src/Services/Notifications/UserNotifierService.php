@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Notifications;
 
-use App\Entity\User;
+use App\Entity\Auth\User;
 use Twig\Environment;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -26,9 +26,9 @@ class UserNotifierService {
             ->html($this->twig->render('email/notification.html.twig', [
                 'user' => $user,
                 'subject' => $emailData['subject'],
-                'message' => $emailData['message']
+                'message' => $emailData['message'], 
+                'link' => $emailData['link'] ?? null
             ]));
         $this->mailer->send($email);
-        
     }
 }

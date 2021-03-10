@@ -6,6 +6,7 @@ use App\Tests\Controller\NeedLogin;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class LoginTest extends WebTestCase
 {
@@ -22,7 +23,10 @@ final class LoginTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function UrlGenerator()
+    /**
+     * @return UrlGeneratorInterface
+     */
+    public function UrlGenerator(): UrlGeneratorInterface
     {
         return $this->client->getContainer()->get('router');
     }
@@ -66,7 +70,7 @@ final class LoginTest extends WebTestCase
         
         $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->client->followRedirect();
-        $this->assertRegExp('/Identifiants invalides./', $this->client->getResponse()->getContent());
+        $this->assertRegExp('/Invalid credentials./', $this->client->getResponse()->getContent());
     }
 
     public function test_TryLoginWithBadCredentials(): void
@@ -81,7 +85,7 @@ final class LoginTest extends WebTestCase
 
         $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->client->followRedirect();
-        $this->assertRegExp('/Identifiants invalides./', $this->client->getResponse()->getContent());
+        $this->assertRegExp('/Invalid credentials./', $this->client->getResponse()->getContent());
     }
 
     public function test_LoginWhitGoodCredentials(): void

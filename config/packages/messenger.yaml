@@ -5,14 +5,15 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            async_priority_normal: 
+            async: 
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
                     max_retries: 0
+                    delay: 5000
             failed: '%env(MESSENGER_TRANSPORT_DSN_FAILED)%'
             # sync: 'sync://'
 
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
-            App\Messenger\Message\UserNotificationMessage: async_priority_normal
+            App\Messenger\Message\UserNotificationMessage: async

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Auth;
 
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
-use SebastianBergmann\Type\VoidType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -71,6 +70,10 @@ class User implements UserInterface
      */
     private $confirmPassword;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $confirmationToken = null;
 
     public function __construct()
     {
@@ -247,6 +250,24 @@ class User implements UserInterface
     public function setConfirmPassword(string $confirmPassword): self
     {
         $this->confirmPassword = $confirmPassword;
+        return $this;
+    }
+
+    /**
+     * Get the value of confirmationToken
+     */ 
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * Set the value of confirmationToken
+     * @return self
+     */ 
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
         return $this;
     }
 }

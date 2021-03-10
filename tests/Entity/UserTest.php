@@ -1,11 +1,12 @@
 <?php
 namespace App\Tests\Entity;
 
-use App\Entity\User;
+
+use App\Entity\Auth\User;
 use App\Repository\UserRepository;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 ;
 

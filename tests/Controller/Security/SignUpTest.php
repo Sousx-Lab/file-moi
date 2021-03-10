@@ -2,15 +2,16 @@
 
 namespace App\Tests\Controller\Security;
 
-use App\Entity\User;
+
+use App\Entity\Auth\User;
 use App\Tests\Controller\NeedLogin;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Messenger\Transport\InMemoryTransport;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 final class SignUpTest extends WebTestCase
 {
@@ -20,7 +21,7 @@ final class SignUpTest extends WebTestCase
     private KernelBrowser $client;
 
     private EntityManagerInterface $em;
-    
+
     use FixturesTrait;
 
     use NeedLogin;
@@ -30,7 +31,7 @@ final class SignUpTest extends WebTestCase
         $this->client = static::createClient();
         $this->em = self::$container->get('doctrine.orm.default_entity_manager');
         $purger = new ORMPurger($this->em);
-        $purger->purge();    
+        $purger->purge();
     }
 
     public function UrlGenerator()
@@ -45,7 +46,7 @@ final class SignUpTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function getRegistrationForm()
+    public function getRegistrationForm(): Crawler
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
         return $crawler->filter('form[name=registration]');
@@ -77,16 +78,11 @@ final class SignUpTest extends WebTestCase
             ->filter('input[name=token]')
             ->matches('input[name=token]');
         $this->assertTrue($csrfTokenField);
-
-        $formElem = $this->getRegistrationForm()
-            ->filterXPath('//input[contains(@name, "registration")]')->evaluate('substring-after(@name, "registration")');
-
-        $this->assertTrue($formElem === ['[email]', '[password]', '[confirmPassword]']);
     }
 
     public function test_RedirectIfUserAlreadyLogged(): void
     {
-        
+
         $user = $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
         $this->login($this->client, $user['user_user']);
 
@@ -98,21 +94,21 @@ final class SignUpTest extends WebTestCase
 
     public function test_UserNotificationMessageDispatched(): void
     {
-        
+
         $form = $this->getRegistrationForm()->selectButton('Sign in up')
             ->form([
-                'registration[email]' => 'john@doe.fr',
-                'registration[password]' => 'Password1',
-                'registration[confirmPassword]' => 'Password1'
-            ],'POST');
+                'email' => 'john@doe.fr',
+                'password' => 'Password1',
+                'confirmPassword' => 'Password1'
+            ], 'POST');
         $this->client->submit($form);
-        $user = $this->em->getRepository(User::class)->findOneBy(['email'=> 'john@doe.fr']);
-        
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => 'john@doe.fr']);
+
         $this->assertInstanceOf(User::class, $user);
-        
+
         /**@var InMemoryTransport */
-        $transport = self::$container->get('messenger.transport.async_priority_normal');
-        
+        $transport = self::$container->get('messenger.transport.async');
+
         $this->assertCount(1, $transport->get());
     }
 }

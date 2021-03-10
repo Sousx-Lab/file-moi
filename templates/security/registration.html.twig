@@ -16,7 +16,7 @@
 
             {{ form_widget(form.email, {
                 'attr': {
-                    'class': 'form-control' ~ (form.email.vars.valid ? ' ' : ' is-invalid'), 
+                    'class': 'form-control' ~ (form.email.vars.valid ? ' ' : ' is-invalid'),
                     'placeholder': 'email@exemple.com'
                     }}) 
                 }}
@@ -30,7 +30,7 @@
 
                 {{ form_widget(form.password, {
                 'attr': {
-                    'class': 'form-control' ~ (form.password.vars.valid ? ' ' : ' is-invalid'), 
+                    'class': 'form-control' ~ (form.password.vars.valid ? ' ' : ' is-invalid'),
                     'placeholder': 'Your passord'
                     }}) 
             }}
@@ -44,7 +44,7 @@
 
             {{ form_widget(form.confirmPassword, {
                 'attr': {
-                    'class': 'form-control' ~ (form.confirmPassword.vars.valid ? ' ' : ' is-invalid'), 
+                    'class': 'form-control' ~ (form.confirmPassword.vars.valid ? ' ' : ' is-invalid'),    
                     'placeholder': 'Confirm your password'
                     }}) 
             }}

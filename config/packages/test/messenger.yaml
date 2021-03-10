@@ -2,4 +2,3 @@ framework:
     messenger:
         transports:
             async: 'in-memory://'
-            async_priority_normal: 'in-memory://'
