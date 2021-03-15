@@ -39,12 +39,8 @@ class PasswordResetTokenRepository extends ServiceEntityRepository
     
     public function findOneByToken(string $token): ?PasswordResetToken
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.token = :val')
-            ->setParameter('val', $token)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+
+        return $this->findOneBy(['token' => $token]);
     }
     
 }

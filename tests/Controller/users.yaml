@@ -5,12 +5,14 @@ App\Entity\Auth\User:
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
     firstname: "John1"
     confirmationToken: ""
+
   user_admin:
     email: "admin\\@doe.fr"
     roles: "[ROLE_ADMIN]"
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
     firstname: "Admin"
     confirmationToken: ""
+  
   user_password_reset:
     email: "johnPasswordReset\\@doe.fr"
     roles: "[]"
@@ -19,7 +21,7 @@ App\Entity\Auth\User:
     confirmationToken: ""
 
 App\Entity\Auth\Password\PasswordResetToken:
-  token_token: 
+  token_token:
     createdAt: '<date_create()>'
     token: "1N3sukqTPQvHz8xhamgK"
     user: '@user_password_reset'

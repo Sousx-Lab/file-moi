@@ -5,14 +5,20 @@ namespace App\Tests\Controller\Security;
 use App\Entity\Auth\User;
 use Symfony\Component\DomCrawler\Crawler;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
+use App\Entity\Auth\Password\PasswordResetToken;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ResetPasswordTest extends WebTestCase
 {
     use FixturesTrait;
+
     private const RESET_PASS_ROUTE = "route_password_reset";
+
+    private const UPDATE_PASS_ROUTE = "route_update_password";
+
     private const LOGIN_ROUTE =  "route_login";
 
     private KernelBrowser $client;
@@ -35,7 +41,6 @@ final class ResetPasswordTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::RESET_PASS_ROUTE));
         return $crawler->filter('form[name=password_reset_request]');
-    
     }
 
     public function test_ForgotPasswordRoute(): void
@@ -70,8 +75,8 @@ final class ResetPasswordTest extends WebTestCase
 
     public function test_OngoingPasswordReset(): void
     {
-        
-        $fixtures= $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
+
+        $fixtures = $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
 
         /**@var User */
         $user = $fixtures['user_password_reset'];
@@ -95,8 +100,67 @@ final class ResetPasswordTest extends WebTestCase
             ]);
         $this->client->submit($form);
 
-        $this->assertResponseRedirects("/login");
+        $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
         $this->client->followRedirect();
+    }
 
+    public function test_UpdatePasswordWithBadTokenOrUserId(): void
+    {
+        $fixtures = $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
+        /**@var User */
+        $user = $fixtures['user_password_reset'];
+
+        /**@var PasswordResetToken */
+        $token = $fixtures['token_token'];
+
+        $this->client->request('GET', $this->UrlGenerator()->generate(
+            self::UPDATE_PASS_ROUTE,
+            [
+                'id' => $user->getId(),
+                'token' => '123456789'
+            ]
+        ));
+        $this->assertResponseRedirects('/login');
+        $this->client->followRedirect();
+        $this->assertStringContainsString('This token is expired', $this->client->getResponse()->getContent());
+
+        $this->client->request('GET', $this->UrlGenerator()->generate(
+            self::UPDATE_PASS_ROUTE,
+            [
+                'id' => 'a73d1c0d-18eb-4e2a-9927-2dfa26802df2',
+                'token' => $token->getToken()
+
+            ]
+        ));
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
+    public function test_UpdatePasswordWithGoodTokenAndUserId(): void
+    {
+        $fixtures = $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
+        /**@var User */
+        $user = $fixtures['user_password_reset'];
+
+        /**@var PasswordResetToken */
+        $token = $fixtures['token_token'];
+
+        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(
+            self::UPDATE_PASS_ROUTE,
+            [
+                'id' => $user->getId(),
+                'token' => $token->getToken()
+            ]
+        ));
+
+        $form = $crawler->filter('form[name=update_password_request]')->selectButton('Update')
+            ->form([
+                'password' => 'NewPassword123',
+                'confirmPassword' => 'NewPassword123'
+            ]);
+
+        $this->client->submit($form);
+        $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
+        $this->client->followRedirect();
+        $this->assertStringContainsString('Your password has been updated successfuly', $this->client->getResponse()->getContent());
     }
 }
