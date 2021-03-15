@@ -4,7 +4,7 @@ namespace App\Services\Security\Password;
 
 final class TokenGeneratorService 
 {
-    private const SIZE = 20;
+    public const SIZE = 20;
 
     public function generate(int $size = null): string
     {

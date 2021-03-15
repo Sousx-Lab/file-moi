@@ -9,10 +9,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Events\Auth\Password\PasswordResetTokenCreatedEvent;
-use Laminas\EventManager\EventManager;
-use Symfony\Component\HttpKernel\DataCollector\EventDataCollector;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
 
 final class AuthSubscriberTest extends KernelTestCase
 {
