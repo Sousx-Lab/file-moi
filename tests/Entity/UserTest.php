@@ -3,7 +3,7 @@ namespace App\Tests\Entity;
 
 
 use App\Entity\Auth\User;
-use App\Repository\UserRepository;
+use App\Repository\Auth\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;

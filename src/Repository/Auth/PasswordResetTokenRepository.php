@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Repository;
+namespace App\Repository\Auth;
 
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Auth\Password\PasswordResetToken;
@@ -39,7 +38,6 @@ class PasswordResetTokenRepository extends ServiceEntityRepository
     
     public function findOneByToken(string $token): ?PasswordResetToken
     {
-
         return $this->findOneBy(['token' => $token]);
     }
     

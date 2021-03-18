@@ -1,0 +1,13 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        file_dl:
+            uri_prefix: '%app.path_files%'
+            upload_destination: '%kernel.project_dir%/public%app.path_files%'
+            directory_namer:
+                service: vich_uploader.namer_directory_property
+                options: { property: 'id'}
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

@@ -4,7 +4,7 @@ namespace App\Entity\Auth\Password;
 
 
 use App\Entity\Auth\User;
-use App\Repository\PasswordResetTokenRepository;
+use App\Repository\Auth\PasswordResetTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

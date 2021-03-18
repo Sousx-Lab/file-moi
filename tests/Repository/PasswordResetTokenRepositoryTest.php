@@ -1,7 +1,7 @@
 <?php
 
 use App\Entity\Auth\Password\PasswordResetToken;
-use App\Repository\PasswordResetTokenRepository;
+use App\Repository\Auth\PasswordResetTokenRepository;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

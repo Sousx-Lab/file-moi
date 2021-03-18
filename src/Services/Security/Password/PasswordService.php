@@ -3,10 +3,10 @@
 namespace App\Services\Security\Password;
 
 use App\Entity\Auth\User;
-use App\Repository\UserRepository;
+use App\Repository\Auth\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Auth\Password\PasswordResetToken;
-use App\Repository\PasswordResetTokenRepository;
+use App\Repository\Auth\PasswordResetTokenRepository;
 use App\Entity\Auth\Exception\UserNotFoundException;
 use App\Services\Security\Password\TokenGeneratorService;
 use App\Entity\Auth\Password\Data\PasswordResetRequestData;

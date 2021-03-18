@@ -2,9 +2,12 @@
 
 namespace App\Entity\Auth;
 
+use App\Entity\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
+use App\Repository\Auth\UserRepository;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -75,12 +78,19 @@ class User implements UserInterface
      */
     private ?string $confirmationToken = null;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=File::class, mappedBy="user")
+     */
+    private $files;
+
+
     public function __construct()
     {
-        $this->id = Uuid::uuid4();
+        $this->id = Uuid::uuid4()->__toString();
+        $this->files = new ArrayCollection();
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -157,36 +167,22 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * Get the value of username
-     */
     public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * Set the value of username
-     * @return self|null
-     */
     public function setFirstname(?string $firstname): ?self
     {
         $this->firstname = $firstname;
         return $this;
     }
 
-    /**
-     * Get the value of createAt
-     */
     public function getCreateAt(): \DateTimeInterface
     {
         return $this->createAt;
     }
 
-    /**
-     * Set the value of createAt
-     * @return self
-     */
     public function setCreateAt(\DateTimeInterface $timestamp): self
     {
         $this->createAt = $timestamp;
@@ -205,19 +201,11 @@ class User implements UserInterface
         }
     }
 
-    /**
-     * Get the value of updatedAt
-     * @return \DateTimeInterface|null
-     */
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    /**
-     * set value to updatedAt
-     * @return self
-     */
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
@@ -236,38 +224,52 @@ class User implements UserInterface
         }
     }
 
-    /**
-     * @return string
-     */
     public function getConfirmPassword(): string
     {
         return $this->confirmPassword;
     }
 
-    /**
-     * @return self
-     */
     public function setConfirmPassword(string $confirmPassword): self
     {
         $this->confirmPassword = $confirmPassword;
         return $this;
     }
 
-    /**
-     * Get the value of confirmationToken
-     */ 
     public function getConfirmationToken(): ?string
     {
         return $this->confirmationToken;
     }
 
-    /**
-     * Set the value of confirmationToken
-     * @return self
-     */ 
     public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
+        return $this;
+    }
+
+    /**
+     * @return Collection|File[]
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->removeElement($file)) {
+            $file->removeUser($this);
+        }
+
         return $this;
     }
 }

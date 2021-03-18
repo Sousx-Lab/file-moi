@@ -85,7 +85,7 @@ final class SignUpTest extends WebTestCase
 
         $user = $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
         $this->login($this->client, $user['user_user']);
-
+        
         $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
         $this->assertResponseRedirects("/");
         $this->client->followRedirect();

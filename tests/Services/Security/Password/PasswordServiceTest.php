@@ -2,8 +2,8 @@
 namespace App\Tests\Services\Security\Password;
 
 use App\Entity\Auth\Password\PasswordResetToken;
-use App\Repository\PasswordResetTokenRepository;
-use App\Repository\UserRepository;
+use App\Repository\Auth\PasswordResetTokenRepository;
+use App\Repository\Auth\UserRepository;
 use App\Services\Security\Password\PasswordService;
 use App\Services\Security\Password\TokenGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
