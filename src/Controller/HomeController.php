@@ -18,23 +18,14 @@ class HomeController extends AbstractController
      * @Route("/", name="route_homepage")
      * @return Response
      */
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request): Response
     {
         $error = null;
         $file = new File();
-        $user = $this->getUser();
 
         $form = $this->createForm(FileFormType::class, $file);
         $form->handleRequest($request);
-        
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $response = $this->forward('App\Controller\File\UploadFileController::upload',[
-                'form' => $form,
-                'user' => $user
-            ]);
-            return $response;
-        }
+
         return $this->render('home/home.html.twig',[
             'error' => $error,
             'form' => $form->createView(),

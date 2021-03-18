@@ -2,8 +2,7 @@
 	<div class="alert alert-danger">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
 {% endif %}
 
-{# <form  method="POST" name="upload_request" enctype="multipart/form-data"> #}
-{{ form_start (form) }}
+<form action={{path ('route_file_upload') }}  method="POST" name="upload_request" enctype="multipart/form-data">
 	<div class="mb-3">
 		{{ form_label(form.uploadedFile, 'Upload file :')}}
 
@@ -22,5 +21,4 @@
 	    <button type="submit" class="btn btn-primary btn-lg">Upload</button>
 
 	{{ form_widget(form._token)}}
-{{ form_end (form) }}
-{# </form> #}
+</form>

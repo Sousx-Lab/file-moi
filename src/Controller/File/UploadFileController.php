@@ -10,20 +10,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 
 class UploadFileController extends AbstractController
 {
     /**
-     * @Route("/upload", name="route_file_uplaod", methods="POST")
+     * @Route("/upload", name="route_file_upload", methods="POST")
      * @return Response
      */
-    public function upload(FormInterface $form, ?User $user, EntityManagerInterface $em): ?Response
+    public function upload(Request $request, EntityManagerInterface $em): ?Response
     {
-        $file = $form->getData();
-        
+        $uploadedFile = $request->files->get('uploadedFile')['file'];
+
         $user = $this->getUser();
-        if ($file instanceof File) {
+        if ($uploadedFile instanceof UploadedFile) {
+            $file = new File();
+            $file->setUploadedFile($uploadedFile);
             if ($user) {
                 $file->addUser($user);
             }
