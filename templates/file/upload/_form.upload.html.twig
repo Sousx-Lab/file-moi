@@ -4,21 +4,19 @@
 
 <form action={{path ('route_file_upload') }}  method="POST" name="upload_request" enctype="multipart/form-data">
 	<div class="mb-3">
-		{{ form_label(form.uploadedFile, 'Upload file :')}}
+		{{ form_label(form.files, 'Upload file :')}}
 
-		{{ form_widget(form.uploadedFile, {
+		{{ form_widget(form.files, {
             'attr': {
-            'class': 'form-control' ~ (form.uploadedFile.vars.valid ? ' ' : ' is-invalid'),
+            'class': 'form-control' ~ (form.files.vars.valid ? ' ' : ' is-invalid'),
             }}) 
 		}}
 		<div class="invalid-feedback  mb-3">
 
-			{{ form_errors(form.uploadedFile) }}
+			{{ form_errors(form.files) }}
 
 		</div>
 	</div>
-
-	    <button type="submit" class="btn btn-primary btn-lg">Upload</button>
-
-	{{ form_widget(form._token)}}
+		<input type="hidden" name="_token" value="{{ csrf_token('upload') }}">
+	 <button type="submit" class="btn btn-primary btn-lg">Upload</button>
 </form>

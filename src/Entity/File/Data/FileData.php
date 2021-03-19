@@ -4,17 +4,16 @@ namespace App\Entity\File\Data;
 use Symfony\Component\HttpFoundation\File\File;
 
 class FileData {
-    
-    private File $file;
 
-    public function getFile(File $file): File
+    private array $files;
+
+    public function getFiles(): array
     {
-        return $this->file = $file;
+        return $this->files;
     }
 
-    public function setFile(File $file): self
+    public function addFiles(File $file)
     {
-        $this->file = $file;
-        return $this;
+        $this->files[] = $file;
     }
 }

@@ -15,8 +15,7 @@ class DownloadFileController extends AbstractController
      */
     public function download(Request $request, File $file)
     {
-
-        return $this->render('file/download/download.html.twig',[
+        return $this->render('file/download/file.download.html.twig',[
             'file' => $file
         ]);
     }

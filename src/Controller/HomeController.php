@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Controller\File\UploadFileController;
-use App\Entity\File\File;
+use App\Entity\File\Data\FileData;
 use App\Form\File\FileFormType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,11 +19,10 @@ class HomeController extends AbstractController
     public function index(Request $request): Response
     {
         $error = null;
-        $file = new File();
+        $fileData = new FileData();
 
-        $form = $this->createForm(FileFormType::class, $file);
-        $form->handleRequest($request);
-
+        $form = $this->createForm(FileFormType::class, $fileData);
+        
         return $this->render('home/home.html.twig',[
             'error' => $error,
             'form' => $form->createView(),

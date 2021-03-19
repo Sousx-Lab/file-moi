@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Download
+{% endblock %}
+
+{% block body %}
+	<div class="mt-5">
+
+		<h1>{{ file.fileName}}
+
+			({{ file.fileSize}})</h1>
+
+		<a class="btn btn-success btn-lg" download href="{{ vich_uploader_asset (file) }}">Download</a>
+
+	</div>
+	
+{% endblock %}
