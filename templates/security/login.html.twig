@@ -5,7 +5,7 @@
 {% block body %}
 <div class="row align-items-center mt-4">
   <div class="col-6 mx-auto ">
-    <form action={{ path ('route_login') }} method="post" name="login">
+    <form action={{ path ('route_login') }} method="post" name="login_form">
 		{% if error %}
 			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 		{% endif %}

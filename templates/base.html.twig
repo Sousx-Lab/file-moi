@@ -20,6 +20,11 @@
 							<span class="sr-only">(current)</span>
 						</a>
 					</li>
+					{% if app.user %}
+					<li class="nav-item">
+						<a class="nav-link" href="#">My Files</a>
+					</li>
+					{% endif %}
 					<li class="nav-item">
 						<a class="nav-link" href="#">About</a>
 					</li>
@@ -29,9 +34,9 @@
 					<div class="float-right" > 
 						<li class="">
 							<span class="text-light">{{app.user.firstname ? app.user.firstname : app.user.email}} </span>
-						</li>
-						<li class="">
-							<a class="" href={{ path ('route_logout') }}>Logout</a>
+								<span class="text-light ml-2 mr-2">
+								<a class="" href={{ path ('route_logout') }}>Logout</a> 
+							</span>
 						</li>
 					{% else %}
 						<li class="">
@@ -51,6 +56,6 @@
 		 {% block body %}{% endblock %}
 			</div>
 			{# {{ encore_entry_script_tags('app') }} #}
-			{% block javascripts %}{% endblock %}
+			{% block javascripts %} {% endblock %}
 		</body>
 	</html>

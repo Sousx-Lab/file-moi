@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\FileServices\UploadFileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class UploadFileController extends AbstractController
 {
@@ -17,26 +20,30 @@ class UploadFileController extends AbstractController
      */
     public function upload(Request $request, UploadFileService $uploadService): Response
     {
+
         $error = null;
-        $files = null;
-        if ($request->getMethod() === Request::METHOD_POST) {
-            $token = $request->request->get('_token');
+        $token = $request->request->get('_token');
 
-            if ($this->isCsrfTokenValid('upload', $token)) {
-                if ($uploadedFiles = $request->files->get('files')) {
-                    try {
-                        $files = $uploadService->UploadFile($uploadedFiles, $this->getUser());
-
-                    } catch (\Throwable $e) {
-                        $error = $e->getMessage();
-                    }
-                    
-                    return $this->render('file/download/files.download.html.twig',[
-                        'files' => $files,
-                        'error' => $error
-                    ]);
-                }
-            }
+        if (false === $this->isCsrfTokenValid('upload', $token)) {
+            throw new BadRequestHttpException('Invalid Csrf token', null, 400);
+            
         }
+
+        $uploadedFiles = $request->files->get('files');
+        if (empty($uploadedFiles)) {
+            throw new UnprocessableEntityHttpException('No file has been uploaded', null, 422);
+        
+        }
+
+        try {
+            $files = $uploadService->UploadFile($uploadedFiles, $this->getUser());
+        } catch (\Throwable $e) {
+            $error = $e->getMessage();
+        }
+
+        return $this->render('file/upload/uploaded.file.download.html.twig', [
+            'files' => $files,
+            'error' => $error
+        ]);
     }
 }

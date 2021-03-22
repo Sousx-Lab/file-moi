@@ -24,4 +24,19 @@ final class HomeControllerTest extends WebTestCase
         $this->client->request('GET', $this->UrlGenerator()->generate(self::HOMPAGE_ROUTE));
         $this->assertResponseIsSuccessful();
     }
+
+    public function test_UploadForm(): void
+    {
+        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::HOMPAGE_ROUTE));
+
+        $filesField = $crawler->filter('form[name=upload_form]')
+            ->filter('input[type=file]')
+            ->matches('input[type=file]');
+        $this->assertTrue($filesField);
+        
+        $tokenField = $crawler->filter('form[name=upload_form]')
+            ->filter('input[type=hidden]')
+            ->matches('input[type=hidden]');
+        $this->assertTrue($tokenField);
+    }
 }

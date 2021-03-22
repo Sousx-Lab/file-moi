@@ -2,8 +2,9 @@
 	<div class="alert alert-danger">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
 {% endif %}
 
-<form action={{path ('route_file_upload') }}  method="POST" name="upload_request" enctype="multipart/form-data">
+<form action={{path ('route_file_upload') }} method="POST" name="upload_form" enctype="multipart/form-data">
 	<div class="mb-3">
+		
 		{{ form_label(form.files, 'Upload file :')}}
 
 		{{ form_widget(form.files, {
@@ -11,11 +12,13 @@
             'class': 'form-control' ~ (form.files.vars.valid ? ' ' : ' is-invalid'),
             }}) 
 		}}
+
 		<div class="invalid-feedback  mb-3">
 
 			{{ form_errors(form.files) }}
 
 		</div>
+	
 	</div>
 		<input type="hidden" name="_token" value="{{ csrf_token('upload') }}">
 	 <button type="submit" class="btn btn-primary btn-lg">Upload</button>

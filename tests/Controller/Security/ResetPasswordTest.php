@@ -40,7 +40,7 @@ final class ResetPasswordTest extends WebTestCase
     public function getPassworResetForm(): Crawler
     {
         $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::RESET_PASS_ROUTE));
-        return $crawler->filter('form[name=password_reset_request]');
+        return $crawler->filter('form[name=password_reset_form]');
     }
 
     public function test_ForgotPasswordRoute(): void
@@ -56,7 +56,7 @@ final class ResetPasswordTest extends WebTestCase
 
     public function test_PasswordResetFormEmailField(): void
     {
-        $emailField = $this->getPassworResetForm()->filter('form[name=password_reset_request]')
+        $emailField = $this->getPassworResetForm()->filter('form[name=password_reset_form]')
             ->filter('input[name=email]')
             ->matches('input[type=email]');
         $this->assertTrue($emailField);
