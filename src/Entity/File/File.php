@@ -50,7 +50,7 @@ class File
     /**
      * @ORM\Column(type="datetime")
     */
-    private ?\DateTimeInterface $createAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -84,14 +84,14 @@ class File
         return $this;
     }
 
-    public function getCreateAt(): \DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeInterface $timestemp): self
+    public function setCreatedAt(\DateTimeInterface $timestemp): self
     {
-        $this->createAt = $timestemp;
+        $this->createdAt = $timestemp;
         return $this;
     }
 
@@ -102,8 +102,8 @@ class File
      */
     public function onPrePersist(): void
     {
-        if (null === $this->createAt) {
-            $this->setCreateAt(new \DateTime('now'));
+        if (null === $this->createdAt) {
+            $this->setCreatedAt(new \DateTime('now'));
         }
     }
  
@@ -175,6 +175,12 @@ class File
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+    
+    public function setUpdatedAt(\DateTimeInterface $timestemp): self
+    {
+        $this->updatedAt = $timestemp;
+        return $this;
     }
 
 }

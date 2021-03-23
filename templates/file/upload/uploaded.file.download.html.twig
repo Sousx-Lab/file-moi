@@ -6,12 +6,12 @@
 
 <div class="mt-5">
         
-        {% for file in files %}
+ {% for file in files %}
+        <div class="mb-3">
 
-            <h3>{{ file.fileName}} ({{ file.fileSize}})</h3>
-
-             <a download href="{{ vich_uploader_asset (file) }}">{{ file.fileName}} </a>
-             
+          <h3 class="mb-3">{{ file.fileName}} ({{ file.fileSize}})</h3>
+          <a class="btn btn-success btn-lg " download href="{{ vich_uploader_asset (file) }}">Download</a>
+        </div>
         {% endfor %}
 </div>
 {% endblock %}

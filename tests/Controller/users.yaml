@@ -25,3 +25,12 @@ App\Entity\Auth\Password\PasswordResetToken:
     createdAt: '<date_create()>'
     token: "1N3sukqTPQvHz8xhamgK"
     user: '@user_password_reset'
+
+App\Entity\File\File:
+  file_file:
+    fileName: 'testFile'
+    fileSize: '4000'
+    mimeType: 'text/plain'
+    createdAt: '<date_create()>'
+    updatedAt: '<date_create()>'
+    user: "[]"

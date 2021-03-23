@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class HomeController extends AbstractController 
+class HomeController extends AbstractController
 {
 
     /**
@@ -22,12 +22,10 @@ class HomeController extends AbstractController
         $fileData = new FileData();
 
         $form = $this->createForm(FileFormType::class, $fileData);
-        
-        return $this->render('home/home.html.twig',[
+
+        return $this->render('home/home.html.twig', [
             'error' => $error,
             'form' => $form->createView(),
         ]);
     }
 }
-
-

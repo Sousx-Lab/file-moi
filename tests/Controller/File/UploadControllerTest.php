@@ -12,8 +12,6 @@ final class UploadControllerTest extends WebTestCase
 {
     private const UPLOAD_ROUTE =  "route_file_upload";
 
-    private const HOMPAGE_ROUTE =  "route_homepage";
-
     private KernelBrowser $client;
 
     private FileGenerator $fileGenerator;
@@ -30,19 +28,6 @@ final class UploadControllerTest extends WebTestCase
         $router = $this->client->getContainer()->get('router');
         return $router->generate($route);
     }
-
-    // private function createFiles(int $num): array
-    // {
-    //     $files = [];
-    //     for ($i = 0; $i < $num; $i++) {
-    //         file_put_contents(
-    //             dirname(__DIR__) . "/File/testFile{$i}.txt",
-    //             'This file is created automatically when run UploadedControllerTest'
-    //         );
-    //         $files[] = new UploadedFile(dirname(__DIR__) . "/File/testFile{$i}.txt", "testFile{$i}", 'text/plain');
-    //     }
-    //     return $files;
-    // }
 
     public function test_BadHttpMethod(): void
     {
@@ -115,6 +100,9 @@ final class UploadControllerTest extends WebTestCase
             ],
 
         );
+
+        $ldFileUrl = $crawler->selectLink('Download')->count();
+        $this->assertEquals(2, $ldFileUrl);
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
     }
 }
