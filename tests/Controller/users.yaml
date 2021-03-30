@@ -5,6 +5,7 @@ App\Entity\Auth\User:
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
     firstname: "John1"
     confirmationToken: ""
+    files: '[]'
 
   user_admin:
     email: "admin\\@doe.fr"
@@ -12,6 +13,7 @@ App\Entity\Auth\User:
     password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
     firstname: "Admin"
     confirmationToken: ""
+    files: '[]'
   
   user_password_reset:
     email: "johnPasswordReset\\@doe.fr"
@@ -19,6 +21,15 @@ App\Entity\Auth\User:
     password: "\\$2y\\$10\\$jkv.9MSO/2U9u8.nGlzHnOZieMgnV846Sl/SA2Hiv561FdXUxaMkO"
     firstname: "JohnToken"
     confirmationToken: ""
+    files: '[]'
+  
+  user_has_file:
+    email: "johnFile\\@doe.fr"
+    roles: "[]"
+    password: "\\$2y\\$10\\$NHcwZXVIOow0fzPBEqsxdePOsxAfMU8lEPBgrwvf6cmLo5ppL7/N2"
+    firstname: "JohnFile"
+    confirmationToken: ""
+    files: '[@file_user]'
 
 App\Entity\Auth\Password\PasswordResetToken:
   token_token:
@@ -34,3 +45,10 @@ App\Entity\File\File:
     createdAt: '<date_create()>'
     updatedAt: '<date_create()>'
     user: "[]"
+  file_user:
+    fileName: 'testFile'
+    fileSize: '4000'
+    mimeType: 'text/plain'
+    createdAt: '<date_create()>'
+    updatedAt: '<date_create()>'
+    user: '[@user_has_file]'

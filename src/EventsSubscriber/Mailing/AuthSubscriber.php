@@ -2,11 +2,11 @@
 
 namespace App\EventsSubscriber\Mailing;
 
-use App\Messenger\Message\UserNotificationMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use App\Events\Auth\Password\PasswordResetTokenCreatedEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use App\Messenger\NotificationMessage\UserNotificationMessage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AuthSubscriber implements EventSubscriberInterface
 {

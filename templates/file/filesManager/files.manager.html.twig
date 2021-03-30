@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ "My files" | trans([], 'messages') }}
+{% endblock %}
+
+{% block body %}
+	<div class="mt-5">
+		<h4>{{ "My files" | trans([], 'messages') }}</h4>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">{{ "Name" | trans([], 'messages') }}</th>
+					<th scope="col">{{ "Created At" | trans([], 'messages') }}</th>
+					<th scope="col">{{ "Size" | trans([], 'messages') }}</th>
+					<th scope="col">Stream</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for file in files %}
+					<tr>
+						<td scope="row"><a href="{{ path ('route_file_download', {id: file.id} ) }}">{{file.FileName}}</a></td>
+						<td>{{file.createdAt|date("m/d/Y") }}</td>
+						<td>{{ file.fileSize|format_file_size }}</td>
+						<td>-</td>
+						<td>
+							<form action="{{ path ('route_file_delete', {id: file.id})}}" method="POST">
+								<input type="hidden" name="_method" value="DELETE">
+								<input type="hidden" name="_token" value="{{ csrf_token('deleteFile') }}">
+								<label>
+									<input type="submit" class="" style="display: none" />
+										<i class="ri-delete-bin-2-line btn"></i>
+								</label>
+							</form>
+						</td>
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+
+{% endblock %}

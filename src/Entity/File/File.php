@@ -35,17 +35,17 @@ class File
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private string $fileName = '';
+    private ?string $fileName = '';
     
     /**
      * @ORM\Column(type="integer", nullable=false)
      */
-    private int $fileSize = 0;
+    private ?int $fileSize = 0;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private string $mimeType = '';
+    private ?string $mimeType = '';
 
     /**
      * @ORM\Column(type="datetime")
@@ -77,7 +77,7 @@ class File
         return $this->fileName;
     }
 
-    public function setFileName(string $fileName): self
+    public function setFileName(?string $fileName): self
     {
         $this->fileName = $fileName;
 
@@ -150,7 +150,7 @@ class File
         return $this->fileSize;
     }
 
-    public function setFileSize($fileSize): self
+    public function setFileSize(?int $fileSize): self
     {
         $this->fileSize = $fileSize;
 
@@ -165,7 +165,7 @@ class File
         return $this->mimeType;
     }
 
-    public function setMimeType($mimeType): self
+    public function setMimeType(?string $mimeType): self
     {
         $this->mimeType = $mimeType;
 
@@ -177,7 +177,7 @@ class File
         return $this->updatedAt;
     }
     
-    public function setUpdatedAt(\DateTimeInterface $timestemp): self
+    public function setUpdatedAt(?\DateTimeInterface $timestemp): self
     {
         $this->updatedAt = $timestemp;
         return $this;

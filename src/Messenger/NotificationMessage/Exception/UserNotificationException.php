@@ -1,5 +1,6 @@
 <?php
-namespace App\Messenger\MessageHandler\Exception;
+namespace App\Messenger\NotificationMessage\Exception;
+
 
 use App\Entity\Auth\Exception\UserNotFoundException;
 

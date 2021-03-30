@@ -14,6 +14,5 @@ framework:
             # sync: 'sync://'
 
         routing:
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
-            App\Messenger\Message\UserNotificationMessage: async
+            App\Messenger\NotificationMessage\UserNotificationMessage: async
+            App\Messenger\FileMessage\FileRemoveMessage: async

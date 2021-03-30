@@ -5,7 +5,7 @@
 <form action={{path ('route_file_upload') }} method="POST" name="upload_form" enctype="multipart/form-data">
 	<div class="mb-3">
 		
-		{{ form_label(form.files, 'Upload file :')}}
+		{{ form_label(form.files, "Upload files..." | trans([], 'messages') ) }}
 
 		{{ form_widget(form.files, {
             'attr': {
@@ -21,5 +21,5 @@
 	
 	</div>
 		<input type="hidden" name="_token" value="{{ csrf_token('upload') }}">
-	 <button type="submit" class="btn btn-primary btn-lg">Upload</button>
+	 <button type="submit" class="btn btn-primary btn-lg">{{'Upload files...'| trans([], 'messages' )}}</button>
 </form>

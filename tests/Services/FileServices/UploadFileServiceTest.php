@@ -8,9 +8,8 @@ use App\Services\FileServices\UploadFileService;
 
 final class UploadFileServiceTest extends TestCase
 {
+    use FileGenerator;
     private UploadFileService $service;
-
-    private FileGenerator $fileGenerator;
 
     private User $user;
 
@@ -24,14 +23,18 @@ final class UploadFileServiceTest extends TestCase
         /**@var EntityManagerInterface */
         $em = $this->getMockBuilder(EntityManagerInterface::class)->getMock();
         
-        $this->fileGenerator = new FileGenerator();
         $this->service = new UploadFileService($em);
     }
-
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->cleanFiles();
+    }
+    
     public function test_ReturnFilesArray(): void
     {
-        $this->assertIsArray($this->service->UploadFile($this->fileGenerator->createFiles(1), $this->user));
-        $this->assertEquals(2, count($this->service->UploadFile($this->fileGenerator->createFiles(2), $this->user)) );
+        $this->assertIsArray($this->service->UploadFile($this->createFiles(1), $this->user));
+        $this->assertEquals(2, count($this->service->UploadFile($this->createFiles(2), $this->user)) );
     }
 
 }

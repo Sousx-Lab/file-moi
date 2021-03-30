@@ -9,7 +9,7 @@
 /vendor/
 /public/dl
 ###< symfony/framework-bundle ###
-
+/tests/Controller/File/files/*
 ###> symfony/phpunit-bridge ###
 .phpunit
 .phpunit.result.cache

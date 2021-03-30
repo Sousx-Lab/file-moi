@@ -16,7 +16,7 @@ class HomeController extends AbstractController
      * @Route("/", name="route_homepage")
      * @return Response
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $error = null;
         $fileData = new FileData();

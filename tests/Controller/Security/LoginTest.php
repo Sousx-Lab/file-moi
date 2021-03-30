@@ -34,7 +34,6 @@ final class LoginTest extends WebTestCase
     {
         $this->client->request('GET', $this->urlGenerator(self::LOGIN_ROUTE));
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Please sign in');
     }
 
     public function test_LoginFormFields(): void

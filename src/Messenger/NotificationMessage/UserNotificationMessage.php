@@ -1,5 +1,6 @@
 <?php
-namespace App\Messenger\Message;
+namespace App\Messenger\NotificationMessage;
+
 
 class UserNotificationMessage
 {
@@ -7,7 +8,8 @@ class UserNotificationMessage
 
     private array $emailData;
 
-    public function __construct(string $userId, array $emailData) {
+    public function __construct(string $userId, array $emailData)
+    {
         $this->userId = $userId;
         $this->emailData = $emailData;
     }
@@ -16,7 +18,7 @@ class UserNotificationMessage
     {
         return $this->emailData;
     }
-    
+
     public function getUserId(): string
     {
         return $this->userId;

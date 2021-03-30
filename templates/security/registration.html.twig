@@ -1,13 +1,13 @@
 {% extends "base.html.twig" %}
 
 {% block title  %}
-	Créer un compte
+	{{ "Sign in up" | trans([], 'messages') }}
 {% endblock %}
 
 {% block body %}
 	<div class="row align-items-center mt-4">
 		<div class="col-6 mx-auto ">
-         <h1 class="h3 mb-3 font-weight-normal">Sign in up</h1>
+         <h1 class="h3 mb-3 font-weight-normal">{{ "Sign in up" | trans([], 'messages') }}</h1>
 
     <form action={{ path('route_registration') }} method="POST" name="registration" >
         
@@ -26,12 +26,12 @@
         </div>
        
         <div calss="mb-3">
-             {{ form_label(form.password, 'Password :')}}
+             {{ form_label(form.password, "Password" | trans([], 'messages')   )}}
 
                 {{ form_widget(form.password, {
                 'attr': {
                     'class': 'form-control' ~ (form.password.vars.valid ? ' ' : ' is-invalid'),
-                    'placeholder': 'Your passord'
+                    'placeholder': "Your password" | trans([], 'messages')
                     }}) 
             }}
                 <div class="invalid-feedback  mb-3">
@@ -40,12 +40,12 @@
         </div>
            
         <div class="mt-3">
-            {{ form_label(form.confirmPassword, 'Confirm Password :')}}
+            {{ form_label(form.confirmPassword, "Confirm password" | trans([], 'messages') ) }}
 
             {{ form_widget(form.confirmPassword, {
                 'attr': {
                     'class': 'form-control' ~ (form.confirmPassword.vars.valid ? ' ' : ' is-invalid'),    
-                    'placeholder': 'Confirm your password'
+                    'placeholder': "Confirm your password" | trans([], 'messages')
                     }}) 
             }}
                 <div class="invalid-feedback  mb-3">

@@ -1,13 +1,15 @@
 <?php
+namespace App\Messenger\NotificationMessage;
 
-namespace App\Messenger\MessageHandler;
+
 
 use App\Entity\Auth\User;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Messenger\Message\UserNotificationMessage;
+
 use App\Services\Notifications\UserNotifierService;
+use App\Messenger\NotificationMessage\UserNotificationMessage;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use App\Messenger\MessageHandler\Exception\UserNotificationException;
+use App\Messenger\NotificationMessage\Exception\UserNotificationException;
 
 class UserNotificationHandler implements MessageHandlerInterface
 {
