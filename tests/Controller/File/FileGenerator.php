@@ -7,6 +7,11 @@ trait FileGenerator {
 
     public function createFiles(int $num): array
     {
+        if(!is_dir(dirname(__DIR__) . "/File/files/"))
+        {
+            mkdir(dirname(__DIR__) . "/File/files", 0777, true);
+        }
+        
         $files = [];
         for ($i = 0; $i < $num; $i++) {
             file_put_contents(

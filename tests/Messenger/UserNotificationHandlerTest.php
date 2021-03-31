@@ -6,7 +6,7 @@ use App\Entity\User;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use App\Services\Notifications\UserNotifierService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Messenger\MessageHandler\UserNotificationHandler;
+use App\Messenger\NotificationMessage\UserNotificationHandler;
 use App\Messenger\NotificationMessage\UserNotificationMessage;
 
 final class UserNotificationHandlerTest extends KernelTestCase
