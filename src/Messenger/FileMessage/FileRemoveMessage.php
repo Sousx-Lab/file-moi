@@ -10,7 +10,8 @@ class FileRemoveMessage
 
     private string $fileName;
 
-    public function __construct(string $uploadPath = null, string $filePath = null, string $fileName) {
+    public function __construct(string $uploadPath, string $filePath, string $fileName) 
+    {
         $this->uploadPath = $uploadPath;
         $this->filePah = $filePath;
         $this->fileName = $fileName;
