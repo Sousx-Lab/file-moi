@@ -5,40 +5,55 @@
 {% endblock %}
 
 {% block body %}
-	<div class="mt-5">
-		<h4>{{ "My files" | trans([], 'messages') }}</h4>
+	<h4 class="mt-4">{{ "My files" | trans([], 'messages') }}</h4>
+	<div class="row border border-success rounded mt-5" style="height : 600px; ">
+		
+		<div class="col-lg-3 border-right border-success ">
+			<div class="mt-5 text-center text-muted">
+			<li>folder1</li>
+			<li>folder2</li>
+			<li>folder3</li>
+			</div>
+			
+		</div>
 
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">{{ "Name" | trans([], 'messages') }}</th>
-					<th scope="col">{{ "Created At" | trans([], 'messages') }}</th>
-					<th scope="col">{{ "Size" | trans([], 'messages') }}</th>
-					<th scope="col">Stream</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for file in files %}
+			<div class="col-lg-9">
+			<table class="table">
+				<thead>
 					<tr>
-						<td scope="row"><a href="{{ path ('route_file_download', {id: file.id} ) }}">{{file.FileName}}</a></td>
-						<td>{{file.createdAt|date("m/d/Y") }}</td>
-						<td>{{ file.fileSize|format_file_size }}</td>
-						<td>-</td>
-						<td>
-							<form action="{{ path ('route_file_delete', {id: file.id})}}" method="POST">
-								<input type="hidden" name="_method" value="DELETE">
-								<input type="hidden" name="_token" value="{{ csrf_token('deleteFile') }}">
-								<label>
-									<input type="submit" class="" style="display: none" />
-										<i class="ri-delete-bin-2-line btn"></i>
-								</label>
-							</form>
-						</td>
+						<th scope="col">{{ "Name" | trans([], 'messages') }}</th>
+						<th scope="col">{{ "Created At" | trans([], 'messages') }}</th>
+						<th scope="col">{{ "Size" | trans([], 'messages') }}</th>
+						<th scope="col">Stream</th>
+						<th scope="col">Action</th>
 					</tr>
-				{% endfor %}
+				</thead>
+				<tbody>
+					{% for file in files %}
+						<tr>
+							<td scope="row">
+								<a href="{{ path ('route_file_download', {id: file.id} ) }}">{{file.FileName}}</a>
+							</td>
+							<td class="text-muted">{{file.createdAt|date("m/d/Y") }}</td>
+							<td class="text-muted">{{ file.fileSize|format_file_size }}</td>
+							<td>-</td>
+							<td>
+								<form action="{{ path ('route_file_delete', {id: file.id})}}" method="POST">
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="_token" value="{{ csrf_token('deleteFile') }}">
+									<label>
+										<input type="submit" class="" style="display: none"/>
+										<i class="ri-delete-bin-2-line btn text-danger"></i>
+									</label>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
 
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
+			
 	</div>
 
 {% endblock %}

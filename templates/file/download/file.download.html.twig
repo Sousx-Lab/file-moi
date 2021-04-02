@@ -5,10 +5,29 @@
 {% endblock %}
 
 {% block body %}
-	<div class="mt-5">
-		<h2>{{ file.fileName}}<small>({{ file.fileSize|format_file_size }})</small> </h2>
+	
+	<div class="mt-5 row justify-content-center">
+		<div class="p-2 col-sm-12">
+			<h2 >{{ file.fileName}}<small> ({{ file.fileSize|format_file_size }}) </small> </h2>
+				{% if app.user %}
+			{% for userFile in app.user.files  %}
+				{% if userFile.id != file.id %}
+				 <form action="{{ path ('route_file_add', {id: file.id}) }}" method="POST">
+					 <input type="hidden" name="_token" value="{{ csrf_token('addUserFile') }}">
+					 <label>
+					 <input type="submit" class="" style="display: none"/>
+						<i class="ri-file-add-fill btn btn-outline-info"> Add file to my list</i>
+					</label>
+				 </form>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		</div>
+	
+		<div class="p-2 col-lg-12">
 		<a class="btn btn-success btn-lg" download href="{{ vich_uploader_asset (file) }}">Download</a>
-
+		</div>
 	</div>
+		
 	
 {% endblock %}
