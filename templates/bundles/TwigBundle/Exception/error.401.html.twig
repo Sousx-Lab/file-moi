@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container mt-4">
+      <div class="row">
+      {% include "/bundles/TwigBundle/Exception/error.image.html.twig" %}
+      {% include "/bundles/TwigBundle/Exception/error.message.html.twig" %}
+    </div>
+  </div>
+   
+{% endblock %}

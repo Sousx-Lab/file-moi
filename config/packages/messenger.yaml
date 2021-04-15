@@ -11,8 +11,7 @@ framework:
                     max_retries: 0
                     delay: 5000
             failed: '%env(MESSENGER_TRANSPORT_DSN_FAILED)%'
-            # sync: 'sync://'
-
+        
         routing:
             App\Messenger\NotificationMessage\UserNotificationMessage: async
             App\Messenger\FileMessage\FileRemoveMessage: async

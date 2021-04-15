@@ -29,9 +29,7 @@ class AddFileToListController extends AbstractController
             $em->flush();
 
             $this->addFlash("success", 'The file has been added to your list');
-            return $this->render('file/download/file.download.html.twig',[
-                'file' => $file
-            ]);
+            return $this->redirectToRoute('route_file_download', ['id' => $file->getId()]);
         }
         return $this->render('file/download/file.download.html.twig',[
             'file' => $file

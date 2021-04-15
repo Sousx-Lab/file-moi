@@ -21,12 +21,12 @@ final class FileRemoverServieTest extends TestCase
     public function test_RemoveFile(): void
     {
         $file = $this->createFiles(1);
-        $uploadPath = str_replace("/files", "", $file[0]->getPath());
+        $filePath =  $file[0]->getPath() . DIRECTORY_SEPARATOR;
         $filesName = $file[0]->getFileName();
-
-        $this->FileRemover->removeFile($uploadPath, "files", $filesName, false);
-
-        $this->assertFileNotExists($uploadPath . '/files/' . $filesName);
+        $this->FileRemover->removeFile($filePath . $filesName, $filesName);
+        
+        $this->assertFileNotExists($filePath . '/files/' . $filesName);
+        $this->assertDirectoryDoesNotExist($filePath);
 
     }
     

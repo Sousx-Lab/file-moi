@@ -19,7 +19,6 @@ class FileRemoveMessageHandler implements MessageHandlerInterface
     public function __invoke(FileRemoveMessage $message)
     {
         $this->service->removeFile(
-            $message->getUploadPath(),
             $message->getFilePath(),
             $message->getFileName()
         );

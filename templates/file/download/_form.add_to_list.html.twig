@@ -1,0 +1,8 @@
+<form action="{{ path ('route_file_add', {id: file.id}) }}" method="POST">
+	<input type="hidden" name="_token" value="{{ csrf_token('addUserFile') }}">
+	<label>
+		<input type="submit" class="" style="display: none"/>
+		<i class="ri-file-add-fill btn btn-outline-info">
+			Add file to my list</i>
+	</label>
+</form>

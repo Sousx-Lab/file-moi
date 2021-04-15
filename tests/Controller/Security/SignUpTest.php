@@ -106,7 +106,7 @@ final class SignUpTest extends WebTestCase
 
         $this->assertInstanceOf(User::class, $user);
 
-        /**@var InMemoryTransport */
+        /**@var InMemoryTransport $transport */
         $transport = self::$container->get('messenger.transport.async');
 
         $this->assertCount(1, $transport->get());

@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Services\FileServices\UploadFileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class UploadFileController extends AbstractController
@@ -24,7 +25,7 @@ class UploadFileController extends AbstractController
         $token = $request->request->get('_token');
 
         if (false === $this->isCsrfTokenValid('upload', $token)) {
-            throw new BadRequestHttpException('Invalid Csrf token', null, 400);
+            throw new UnauthorizedHttpException('Invalid Csrf token', null, null, 401);
             
         }
 

@@ -65,7 +65,7 @@ final class UploadControllerTest extends WebTestCase
 
         );
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
     }
 
     public function test_EmptyUploadedFile(): void
