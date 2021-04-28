@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Messenger\Message\UserNotificationMessage;
+use App\Services\Security\Registraion\SignUpService;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -21,13 +22,10 @@ class SignUpController extends AbstractController
      * @Route("/registration", name="route_registration")
      * @return Response
      */
-    public function registration(
-        Request $request,
-        UserPasswordEncoderInterface $encoder,
-        EntityManagerInterface $em,
-        MessageBusInterface $messageBus
-    ): Response {
+    public function registration(Request $request, SignUpService $signUpService): Response
+    {
 
+        $error = null;
         if (null !== $user = $this->getUser()) {
             $this->addFlash('info', 'You are already logged in as much as : ' . $user->getFirstname() ?? $user->getUsername());
             return $this->redirectToRoute('route_homepage');
@@ -39,24 +37,17 @@ class SignUpController extends AbstractController
 
         if ($form->isSubmitted() && $this->isCsrfTokenValid('register-user', $request->get('token'))) {
 
-            $password = $encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-            $em->persist($user);
-            $em->flush();
-
-            $messageBus->dispatch(new UserNotificationMessage(
-                $user->getId(),
-                [
-                    'subject' => 'Account created',
-                    'message' =>  'Your account has been created successfully'
-                ]
-            ));
-
-            $this->addFlash('success', 'Your account has been created successfully');
-            return $this->redirectToRoute('route_login');
+            try {
+                $signUpService->registerUser($user);
+                $this->addFlash('success', 'Your account has been created successfully');
+                return $this->redirectToRoute('route_login');
+            } catch (\Throwable $e) {
+                $error = $e->getMessage();
+            }
         }
         return $this->render("security/registration.html.twig", [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'error' => $error
         ]);
     }
 }

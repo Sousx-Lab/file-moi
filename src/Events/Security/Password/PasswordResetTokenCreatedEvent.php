@@ -1,5 +1,5 @@
 <?php
-namespace App\Events\Auth\Password;
+namespace App\Events\Security\Password;
 
 use App\Entity\Auth\Password\PasswordResetToken;
 use App\Entity\Auth\User;

@@ -116,7 +116,7 @@ class File
     {
         $this->uploadedFile = $file;
 
-        if($file){
+        if(null !== $file){
             $this->updatedAt = new \DateTime('now');
         }
     }

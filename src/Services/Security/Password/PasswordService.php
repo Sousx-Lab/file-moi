@@ -11,7 +11,7 @@ use App\Entity\Auth\Exception\UserNotFoundException;
 use App\Services\Security\Password\TokenGeneratorService;
 use App\Entity\Auth\Password\Data\PasswordResetRequestData;
 use App\Entity\Auth\Password\Exception\OngoingPasswordResetException;
-use App\Events\Auth\Password\PasswordResetTokenCreatedEvent;
+use App\Events\Security\Password\PasswordResetTokenCreatedEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

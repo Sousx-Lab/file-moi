@@ -3,7 +3,7 @@
 namespace App\EventsSubscriber\Mailing;
 
 use Symfony\Component\Messenger\MessageBusInterface;
-use App\Events\Auth\Password\PasswordResetTokenCreatedEvent;
+use App\Events\Security\Password\PasswordResetTokenCreatedEvent;
 use App\Messenger\NotificationMessage\UserNotificationMessage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

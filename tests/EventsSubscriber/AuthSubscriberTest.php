@@ -8,7 +8,7 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Events\Auth\Password\PasswordResetTokenCreatedEvent;
+use App\Events\Security\Password\PasswordResetTokenCreatedEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class AuthSubscriberTest extends KernelTestCase
