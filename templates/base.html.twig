@@ -2,13 +2,10 @@
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8">
-		<title>
-			{% block title %}Welcome!
-			{% endblock %}
-		</title>
-		<link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css" crossorigin="anonymous">
-		<link
-		href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+		<title>{% block title %}{% endblock %}	</title>
+			
+		<link rel="stylesheet" href="https://bootswatch.com/4/pulse/bootstrap.min.css" crossorigin="anonymous">
+		<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 		{# {{ encore_entry_link_tags('app') }} #}
 		{% block stylesheets %}{% endblock %}
 	</head>
@@ -16,7 +13,7 @@
 		<nav class="navbar navbar-expand-md navbar-dark bg-primary">
 			<div class="collapse navbar-collapse" id="navbarColor01">
 				<ul class="navbar-nav mx-auto">
-					<li class="nav-item active">
+					<li class="nav-item">
 						<a class="nav-link" href={{path ("route_homepage")}}>{{ "Home" | trans([], 'messages') }}
 							<span class="sr-only">(current)</span>
 						</a>
@@ -34,19 +31,18 @@
 			{% if app.user %}
 				<div class="float-right">
 					<li class="">
-						<span class="text-light">{{app.user.firstname ? app.user.firstname : app.user.email}}
-						</span>
-						<span class="text-light ml-2 mr-2">
-							<a class="" href={{ path ('route_logout') }}>{{ "Logout" | trans([], 'messages') }}</a>
+						<span class="text-light">{{app.user.firstname ? app.user.firstname : app.user.email}}</span>
+						<span class="ml-2 mr-2">
+							<a class="text-muted" href={{ path ('route_logout') }}>{{ "Logout" | trans([], 'messages') }}</a>
 						</span>
 					</li>
 				{% else %}
 					<li class="">
-						<a href={{ path ('route_login') }} class="">{{ "Login" | trans([], 'messages') }}</a>
-						<span class="text-light ml-2 mr-2">
+						<a href={{ path ('route_login') }} class="text-light">{{ "Login" | trans([], 'messages') }}</a>
+						<span class="text-secondary ml-2 mr-2">
 							|
 						</span>
-						<a class="" href={{ path ('route_registration') }}>{{ "Sign Up" | trans([], 'messages') }}</a>
+						 <a class="text-light" href={{ path ('route_registration') }}>{{ "Sign Up" | trans([], 'messages') }}</a>
 					</li>
 				{% endif %}
 			</div>
