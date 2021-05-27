@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-100">
 	<head>
 		<meta charset="UTF-8">
 		<title>{% block title %}{% endblock %}	</title>
@@ -9,22 +9,20 @@
 		{# {{ encore_entry_link_tags('app') }} #}
 		{% block stylesheets %}{% endblock %}
 	</head>
-	<body>
+	<body class="h-100">
 		<nav class="navbar navbar-expand-md navbar-dark bg-primary">
 			<div class="collapse navbar-collapse" id="navbarColor01">
 				<ul class="navbar-nav mx-auto">
 					<li class="nav-item">
-						<a class="nav-link" href={{path ("route_homepage")}}>{{ "Home" | trans([], 'messages') }}
+						<a class="nav-link text-light" href={{path ("route_homepage")}}>{{ "Home" | trans([], 'messages') }}
 							<span class="sr-only">(current)</span>
 						</a>
 					</li>
-					{% if app.user %}
 						<li class="nav-item">
-							<a class="nav-link" href="{{path ("route_files_manager")}}">{{ "My files" | trans([], 'messages') }}</a>
+							<a class="nav-link text-light" href="{{path ("route_files_manager")}}">{{ "My files" | trans([], 'messages') }}</a>
 						</li>
-					{% endif %}
 					<li class="nav-item">
-						<a class="nav-link" href="#">{{ "About" | trans([], 'messages') }}</a>
+						<a class="nav-link text-light" href="#">{{ "About" | trans([], 'messages') }}</a>
 					</li>
 				</ul>
 			</div>
@@ -51,13 +49,17 @@
 			<div class="row d-flex justify-content-center mt-3">
 				{% for label, messages in app.flashes %}
 					{% for message in messages %}
-						<div class="col-md-6 alert alert-{{ label }}">{{ message }}</div>
+						<div class="col-md-6 alert alert-{{ label }}">{{ message | trans([], 'messages')}}</div>
 					{% endfor %}
 				{% endfor %}
 			</div>
 			{% block body %}{% endblock %}
 		</div>
+		{% include "home/footer.html.twig" %}
 		{# {{ encore_entry_script_tags('app') }} #}
+		
 		{% block javascripts %}{% endblock %}
 	</body>
+	
+	
 </html>

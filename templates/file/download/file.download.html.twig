@@ -6,12 +6,18 @@
 
 {% block body %}
 	
-	<div class="mt-5 row justify-content-center">
+	<div class="mt-5 row ">
 		<div class="p-2 col-sm-12">
-			<h2 >{{ file.fileName}}<small> ({{ file.fileSize|format_file_size }}) </small> </h2>
+			<h2 >{{ file.fileName}}<small> ({{ file.fileSize|format_file_size }}) </small></h2>
+			</div>
+			<div class="p-2 col-sm-12">
+			<a class="btn btn-success btn-md mb-2" download href="{{ vich_uploader_asset (file) }}">{{ "Download" | trans([], 'messages')}}</a>
 				{% if app.user %}
+
 					{% if app.user.files is not empty %}
-			{% for userFiles in app.user.files %}
+
+				{% for userFiles in app.user.files %}
+				
 				{% if userFiles.id != file.id %}
 				 	{% include "file/download/_form.add_to_list.html.twig" %}
 				{% endif %}
@@ -19,16 +25,11 @@
 
 				{% else %}
 
-				{% include "file/download/_form.add_to_list.html.twig" %}
+					{% include "file/download/_form.add_to_list.html.twig" %}
 
 			{% endif %}
 		{% endif %}
-		</div>
-	
-		<div class="p-2 col-lg-12">
-		<a class="btn btn-success btn-lg" download href="{{ vich_uploader_asset (file) }}">Download</a>
-		</div>
+			</div>
 	</div>
-		
 	
 {% endblock %}

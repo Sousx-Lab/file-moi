@@ -22,9 +22,8 @@
 				<thead>
 					<tr>
 						<th scope="col">{{ "Name" | trans([], 'messages') }}</th>
-						<th scope="col">{{ "Created At" | trans([], 'messages') }}</th>
+						<th scope="col">{{ "Uploaded at" | trans([], 'messages') }}</th>
 						<th scope="col">{{ "Size" | trans([], 'messages') }}</th>
-						<th scope="col">Stream</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
@@ -36,7 +35,6 @@
 							</td>
 							<td class="text-muted">{{file.createdAt|date("m/d/Y") }}</td>
 							<td class="text-muted">{{ file.fileSize|format_file_size }}</td>
-							<td>-</td>
 							<td>
 								<form action="{{ path ('route_file_delete', {id: file.id})}}" method="POST">
 									<input type="hidden" name="_method" value="DELETE">

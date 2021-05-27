@@ -2,11 +2,12 @@
 
 namespace App\Controller\File;
 
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\FileServices\UploadFileService;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Services\FileServices\FileSizeFormatterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -17,16 +18,21 @@ class UploadFileController extends AbstractController
      * @Route("/upload", name="route_file_upload", methods="POST")
      * @return Response
      */
-    public function upload(Request $request, UploadFileService $uploadService): Response
+    public function upload(Request $request, UploadFileService $uploadService, 
+        FileSizeFormatterService $formatter,
+        TranslatorInterface $translator
+        ): Response
     {
 
         $error = null;
         $token = $request->request->get('_token');
         $uploadedFiles = $request->files->get('files');
 
+        $maxSize = $formatter->format($this->getParameter('app.max_file_size'));
         if(null === $uploadedFiles)
         {
-           $this->addFlash('danger', "The file exceeds the allowed limit of " . ini_get("upload_max_filesize"));
+           $this->addFlash('danger', 
+           $translator->trans("The file size exceeds the allowed limit of %maxSize%",['%maxSize%' => $maxSize]));
            return $this->redirectToRoute("route_homepage");
         }
 

@@ -8,7 +8,7 @@ Logout: Déconnexion
 ### Navbar MENU ###
 
 Name: Nom
-Created At: Crée le
+Uploaded at: Crée le
 Sign in: Se connecter
 Size: Taille
 Upload files... : Envoyez vos fichiers...
@@ -16,8 +16,13 @@ Remember me: Se sevenir de moi
 Sign in up: Inscrivez-vous
 Forgot password ?: Mot de passe oublié ?
 Password : "Mot de passe :"
-Your password: "Votre mot de passe"
+Your password: "Votre mot de passe :"
 Confirm password: "Confirmez votre mot de passe :"
 Confirm your password: Veuillez entrer le mème mot passe
 Update Password: Changez votre mot depasse
 My files: Mes fichiers
+The file size exceeds the allowed limit of %maxSize%: La taille du fichier dépasse la limite autorisée de %maxSize%
+Download: Téléchargez
+Add file to my list: Ajoutez à ma liste.
+The file has been added to your list : Le fichier a bien été ajouté à votre liste.
+File has been removed: Le fichier a été supprimé. 
