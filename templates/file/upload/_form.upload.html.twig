@@ -4,7 +4,7 @@
 
 <form action={{path ('route_file_upload') }} method="POST" name="upload_form" enctype="multipart/form-data">
 	<div class="mb-3">
-		{{ form_label(form.files, "Upload files..." | trans([], 'messages') ~ "(maximum "  ~  max_file_size |format_file_size ~ " par fichier)"  ) }}
+		{{ form_label(form.files, "Upload files..." | trans([], 'messages') ~ "(maximum "  ~  max_file_size |format_file_size ~ " par fichier)" ) }}
 
 		{{ form_widget(form.files, {
             'attr': {

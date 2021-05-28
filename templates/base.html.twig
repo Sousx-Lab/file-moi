@@ -6,13 +6,22 @@
 			
 		<link rel="stylesheet" href="https://bootswatch.com/4/pulse/bootstrap.min.css" crossorigin="anonymous">
 		<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		{# {{ encore_entry_link_tags('app') }} #}
 		{% block stylesheets %}{% endblock %}
 	</head>
-	<body class="h-100">
-		<nav class="navbar navbar-expand-md navbar-dark bg-primary">
-			<div class="collapse navbar-collapse" id="navbarColor01">
-				<ul class="navbar-nav mx-auto">
+	<body class="h-100 d-flex flex-column">
+		<nav class="navbar navbar-expand-md d-flex navbar-dark bg-dark justify-content-center">
+			<div class="navbar-brand d-flex w-50 mr-auto"></div>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarPulse" aria-controls="navbarPulse" aria-expanded="false" aria-label="Toggle navigation">
+    			<span class="navbar-toggler-icon"></span>
+  			</button>
+			<div class="navbar-collapse collapse w-100" id="navbarPulse">
+				<ul class="navbar-nav w-100 justify-content-center font-weight-bold">
+
 					<li class="nav-item">
 						<a class="nav-link text-light" href={{path ("route_homepage")}}>{{ "Home" | trans([], 'messages') }}
 							<span class="sr-only">(current)</span>
@@ -25,27 +34,26 @@
 						<a class="nav-link text-light" href="#">{{ "About" | trans([], 'messages') }}</a>
 					</li>
 				</ul>
-			</div>
+			<ul class="nav navbar-nav ml-auto w-100 justify-content-end">
 			{% if app.user %}
-				<div class="float-right">
-					<li class="">
+					<li class="nav-item">
 						<span class="text-light">{{app.user.firstname ? app.user.firstname : app.user.email}}</span>
 						<span class="ml-2 mr-2">
 							<a class="text-muted" href={{ path ('route_logout') }}>{{ "Logout" | trans([], 'messages') }}</a>
 						</span>
 					</li>
 				{% else %}
-					<li class="">
-						<a href={{ path ('route_login') }} class="text-light">{{ "Login" | trans([], 'messages') }}</a>
-						<span class="text-secondary ml-2 mr-2">
-							|
-						</span>
-						 <a class="text-light" href={{ path ('route_registration') }}>{{ "Sign Up" | trans([], 'messages') }}</a>
+					<li class="nav-item mr-2">
+						<a href={{ path ('route_login') }} class="btn btn-primary">{{ "Login" | trans([], 'messages') }}</a>
 					</li>
-				{% endif %}
+					<li class="nav-item">
+						<a class="btn btn-danger" href={{ path ('route_registration') }}>{{ "Sign Up" | trans([], 'messages') }}</a>
+					</li>	
+			{% endif %}
+				</ul>
 			</div>
 		</nav>
-		<div class="container h-100">
+		<div class="container">
 			<div class="row d-flex justify-content-center mt-3">
 				{% for label, messages in app.flashes %}
 					{% for message in messages %}
@@ -55,11 +63,11 @@
 			</div>
 			{% block body %}{% endblock %}
 		</div>
-		{% include "home/footer.html.twig" %}
-		{# {{ encore_entry_script_tags('app') }} #}
 		
-		{% block javascripts %}{% endblock %}
+		
+		{% include "footer.html.twig" %}
+		
 	</body>
-	
-	
+	{# {{ encore_entry_script_tags('app') }} #}
+	{% block javascripts %}{% endblock %}
 </html>
