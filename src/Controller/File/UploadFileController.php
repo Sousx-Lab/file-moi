@@ -29,11 +29,13 @@ class UploadFileController extends AbstractController
         $uploadedFiles = $request->files->get('files');
 
         $maxSize = $formatter->format($this->getParameter('app.max_file_size'));
+
         if(null === $uploadedFiles)
-        {
+        {  
+           
            $this->addFlash('danger', 
-           $translator->trans("The file size exceeds the allowed limit of %maxSize%",['%maxSize%' => $maxSize]));
-           return $this->redirectToRoute("route_homepage");
+                $translator->trans("The file size exceeds the allowed limit of %maxSize%",['%maxSize%' => $maxSize]));
+           return $this->redirectToRoute("route_homepage", [], 303);
         }
 
         if (false === $this->isCsrfTokenValid('upload', $token)) {

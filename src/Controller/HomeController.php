@@ -22,7 +22,7 @@ class HomeController extends AbstractController
         $fileData = new FileData();
 
         $form = $this->createForm(FileFormType::class, $fileData);
-
+        
         return $this->render('home/home.html.twig', [
             'error' => $error,
             'form' => $form->createView(),
