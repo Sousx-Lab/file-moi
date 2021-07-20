@@ -29,12 +29,12 @@ if you have a database already installed and configured, change the ```"root:roo
 
 Create database:
   ```bash
-  php bin/console doctrine:database:create 
+   php bin/console doctrine:database:create 
   ```
 
 Migrate the database:
 ```bash
-  php bin/console doctrine:migrations:migrate 
+ php bin/console doctrine:migrations:migrate 
 ```
 #### SMTP Server:
 Default port MailHog server ```1025```.  
@@ -46,5 +46,5 @@ Default port MailHog server ```1025```.
  run this command and choose ***async*** to start for it :
 
 ```bash
- php bin/console messenger:consume -vv 
+  php bin/console messenger:consume -vv 
  ```
