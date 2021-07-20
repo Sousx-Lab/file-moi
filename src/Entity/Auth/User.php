@@ -42,14 +42,14 @@ class User implements UserInterface
     private ?string $firstname;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private ?\DateTimeInterface $createAt = null;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $updatedAt = null;
+    private ?\DateTimeInterface $updatedAt;
 
     /**
      * @ORM\Column(type="json")
@@ -76,7 +76,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $confirmationToken = null;
+    private ?string $confirmationToken;
 
     /**
      * @ORM\ManyToMany(targetEntity=File::class, mappedBy="user")
