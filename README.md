@@ -13,7 +13,7 @@ Installing dependencies:
 ```bash
   composer install
 ```
-##### This project uses Docker to launch Mysql database and MailHog to emulate an smtp server, but you can use other things if you have another environment.
+##### This project uses Mysql database and MailHog to emulate an smtp server.
 You can edit the **docker-compose.yml** file to change the database password and username.
 This command also installs **Adminer**, you can remove it if you don't want to use it.
 ```bach
