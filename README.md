@@ -32,7 +32,7 @@ Create database:
    php bin/console doctrine:database:create 
   ```
 
-Migrate the database:
+Migrate database:
 ```bash
  php bin/console doctrine:migrations:migrate 
 ```
