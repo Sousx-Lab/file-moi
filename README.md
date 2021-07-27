@@ -4,7 +4,7 @@ A free project to share files, inspired by zippyshare.com
 
 ## Screenshot
 
-![App Screenshot](https://i.postimg.cc/nzkG2GmG/file-share.jpg)
+![file-share.jpg](https://i.postimg.cc/nzkG2GmG/file-share.jpg)
 
 ## Deployment
 
