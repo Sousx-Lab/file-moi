@@ -4,7 +4,7 @@ A free project to share files, inspired by zippyshare.com
 
 ## Screenshot
 
-![App Screenshot](https://i.postimg.cc/nzkG2GmG/file-share.jpg)
+![file-share.jpg](https://i.postimg.cc/nzkG2GmG/file-share.jpg)
 
 ## Deployment
 
@@ -13,7 +13,7 @@ Installing dependencies:
 ```bash
   composer install
 ```
-##### This project uses Docker to launch Mysql database and MailHog to emulate an smtp server, but you can use other things if you have another environment.
+##### This project uses Mysql database and MailHog to emulate an smtp server.
 You can edit the **docker-compose.yml** file to change the database password and username.
 This command also installs **Adminer**, you can remove it if you don't want to use it.
 ```bach
@@ -29,12 +29,12 @@ if you have a database already installed and configured, change the ```"root:roo
 
 Create database:
   ```bash
-  php bin/console doctrine:database:create 
+   php bin/console doctrine:database:create 
   ```
 
-Migrate the database:
+Migrate database:
 ```bash
-  php bin/console doctrine:migrations:migrate 
+ php bin/console doctrine:migrations:migrate 
 ```
 #### SMTP Server:
 Default port MailHog server ```1025```.  
@@ -46,5 +46,5 @@ Default port MailHog server ```1025```.
  run this command and choose ***async*** to start for it :
 
 ```bash
- php bin/console messenger:consume -vv 
+  php bin/console messenger:consume -vv 
  ```
