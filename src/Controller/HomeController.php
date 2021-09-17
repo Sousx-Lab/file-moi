@@ -28,11 +28,13 @@ class HomeController extends AbstractController
         $form = $this->createForm(FileFormType::class, $fileData);
         $form->handleRequest($request);
         $uploadedFiles = $request->files->get('files') ?? [];
-        
+
         if ($form->isSubmitted()) {
-            if(!$form->isValid() || count($uploadedFiles)  === 0)
-            {
-                if(count($uploadedFiles) === 0){$form->get('files')->addError(new FormError('No file has been uploaded'));}
+
+            if (!$form->isValid() || count($uploadedFiles)  === 0) {
+                if (count($uploadedFiles) === 0) {
+                    $form->get('files')->addError(new FormError('No file has been uploaded'));
+                }
                 return new Response(
                     $this->renderView('home/home.html.twig', [
                         'form' =>  $form->createView(),
@@ -42,11 +44,19 @@ class HomeController extends AbstractController
             }
             try {
                 $files = $uploadService->UploadFile($uploadedFiles, $this->getUser());
+                $view = 'file/upload/uploaded.file.download.html.twig';
+                if (false !== strpos($request->headers->get('accept'), 'text/vnd.turbo-stream.html')) {
+                    $view = 'file/upload/stream.file_download.html.twig';
+                }
+
                 return new Response(
-                    $this->renderView('file/upload/uploaded.file.download.html.twig', [
+                    $this->renderView($view, [
                         'files' => $files
                     ]),
-                    Response::HTTP_SEE_OTHER
+                    Response::HTTP_OK,
+                    [
+                        'Content-Type' => 'text/vnd.turbo-stream.html'
+                    ]
                 );
             } catch (\Throwable $e) {
                 $form->get('files')->addError(new FormError($e->getMessage()));

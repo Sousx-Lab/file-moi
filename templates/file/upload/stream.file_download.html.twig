@@ -1,0 +1,15 @@
+<turbo-stream action="append" target="download">
+	<template>
+		<div class="mt-5">
+			{% for file in files %}
+				<div class="col-sm-12">
+					<h2 class="mb-3">{{ file.fileName}}
+						<small>({{ file.fileSize|format_file_size }})</small>
+					</h2>
+					<a class="btn btn-success btn-sm " download href="{{ vich_uploader_asset (file) }}">Download</a>
+					<button type="button" class="btn btn-info btn-sm" data-link="{{absolute_url(path ('route_file_download', {id: file.id})) }}">Copy link</button>
+				</div>
+			{% endfor %}
+		</div>
+	</template>
+</turbo-stream>

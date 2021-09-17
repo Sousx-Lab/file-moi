@@ -108,6 +108,6 @@ final class HomeControllerTest extends WebTestCase
         $dlFileUrl = $crawler->selectLink('Download')->count();
         
         $this->assertEquals(2, $dlFileUrl);
-        $this->assertEquals(Response::HTTP_SEE_OTHER, self::$client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
     }
 }

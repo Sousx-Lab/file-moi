@@ -1,0 +1,27 @@
+{
+  "name": "file-share",
+  "version": "1.0.0",
+  "repository": "https://github.com/Sousx-Lab/file-share.git",
+  "author": "Nassim H <nssmhttb@gmail.com>",
+  "license": "MIT",
+  "app": "assets/js/app.js",
+  "targets": {
+    "app": {
+      "engines": {
+        "browsers": "Chrome 70"
+      },
+      "distDir": "public/assets/"
+    }
+  },
+  "scripts": {
+    "start": "parcel serve ./assets/js/app.js",
+    "build": "parcel build ./assets/js/app.js --public-url public/assets/",
+    "watch": "parcel watch ./assets/js/app.js --dist-dir public/assets/"
+  },
+  "dependencies": {
+    "@hotwired/turbo": "^7.0.0-rc.4"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.0-rc.0"
+  }
+}

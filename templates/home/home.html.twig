@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<div class="jumbotron mt-5">
+<div class="jumbotron mt-5" id="download">
   <h1 class="display-5">Partagez rapidement vos fichiers !</h1>
   <p class="lead">Uploadez jusqu'à {{ (max_file_size * 10) | format_file_size }} et partagez-les rapidement avec vos amis.</p>
 <div class="mt-3">
@@ -18,9 +18,8 @@
 
   <hr class="my-4">
 
-  <p class="lead">
-     
-  </p>
+  <p class="lead"></p>
+
    {% include "file/upload/_form.upload.html.twig" %}
 </div>
     
