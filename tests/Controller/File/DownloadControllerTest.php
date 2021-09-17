@@ -14,26 +14,29 @@ final class DownloadControllerTest extends WebTestCase
     private const DOWNLOAD_ROUTE =  "route_file_download";
 
     use FixturesTrait;
-    private KernelBrowser $client;
+
+    private static ?KernelBrowser $client = null;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
+        if (null === self::$client) {
+            self::$client = static::createClient();
+        }
     }
 
     public function UrlGenerator(string $route, array $params = [], int $path = 1 ): string
     {
         /**@var UrlGeneratorInterface */
-        $router = $this->client->getContainer()->get('router');
+        $router = self::$client->getContainer()->get('router');
         return $router->generate($route, $params, $path);
     }
 
     public function test_DownloadFileNotFound(): void
     {
-       $crawler = $this->client->request('GET', $this->UrlGenerator(self::DOWNLOAD_ROUTE, ['id' => Uuid::uuid()]));
+       $crawler = self::$client->request('GET', $this->UrlGenerator(self::DOWNLOAD_ROUTE, ['id' => Uuid::uuid()]));
 
-       $this->assertRegExp('/File not found !/', $this->client->getResponse()->getContent());
-       $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+       $this->assertMatchesRegularExpression('/File not found !/', self::$client->getResponse()->getContent());
+       $this->assertEquals(Response::HTTP_NOT_FOUND, self::$client->getResponse()->getStatusCode());
     }
 
     public function test_DownloadFileExist(): void
@@ -43,7 +46,7 @@ final class DownloadControllerTest extends WebTestCase
         /**@var File */
         $file = $fixtures['file_file'];
 
-        $crawler = $this->client->request(
+        $crawler = self::$client->request(
                 'GET',
                 $this->UrlGenerator(self::DOWNLOAD_ROUTE, [
                     'id' => $file->getId()
@@ -56,9 +59,9 @@ final class DownloadControllerTest extends WebTestCase
 
         $this->assertEquals($link->link()->getUri(),  $this->UrlGenerator('route_homepage', [], 0). $dlFileUrl);
 
-        $this->assertRegExp("/{$file->getFileName()}/", $this->client->getResponse()->getContent());
+        $this->assertMatchesRegularExpression("/{$file->getFileName()}/", self::$client->getResponse()->getContent());
         
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, self::$client->getResponse()->getStatusCode());
 
     }
 }

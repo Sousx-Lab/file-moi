@@ -1,9 +1,5 @@
-{% if error %}
-	<div class="alert alert-danger">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
-{% endif %}
-
-<form action={{path ('route_file_upload') }} method="POST" name="upload_form" enctype="multipart/form-data">
-	<div class="mb-3">
+<form action={{path ('route_homepage') }} method="POST" name="upload_form" enctype="multipart/form-data">
+	<div class="mb-5">
 		{{ form_label(form.files, "Upload files..." | trans([], 'messages') ~ "(maximum "  ~  max_file_size |format_file_size ~ " par fichier)" ) }}
 
 		{{ form_widget(form.files, {
@@ -11,14 +7,14 @@
             'class': 'form-control' ~ (form.files.vars.valid ? ' ' : ' is-invalid'),
             }}) 
 		}}
-
-		<div class="invalid-feedback  mb-3">
-
-			{{ form_errors(form.files) }}
-
+		{% if form_errors(form.files) %}
+			{% for error in form.files.vars.errors %}
+				<div class="invalid-feedback pt-3">{{error.message | trans([], 'messages') }}</div>
+			{% endfor %}
+		{% endif %}
+			
 		</div>
-	
-	</div>
+
 		<input type="hidden" name="_token" value="{{ csrf_token('upload') }}">
 	 <button type="submit" class="btn btn-primary btn-lg">{{'Upload files...'| trans([], 'messages' )}}</button>
 </form>

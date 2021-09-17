@@ -2,21 +2,21 @@
 namespace App\Services\Security\Registraion;
 
 use App\Entity\Auth\User;
-use App\Events\Security\Registration\NewUserEnrolledEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Events\Security\Registration\NewUserEnrolledEvent;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SignUpService 
 {
     private EntityManagerInterface $em;
 
-    private UserPasswordEncoderInterface $encoder;
+    private UserPasswordHasherInterface $encoder;
 
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(EntityManagerInterface $em, 
-        UserPasswordEncoderInterface $encoder,
+        UserPasswordHasherInterface $encoder,
         EventDispatcherInterface $dispatcher) {
         $this->em = $em;
         $this->encoder = $encoder;
@@ -25,7 +25,7 @@ class SignUpService
 
     public function registerUser(User $user)
     {
-        $password = $this->encoder->encodePassword($user, $user->getPassword());
+        $password = $this->encoder->hashPassword($user, $user->getPassword());
         $user->setPassword($password);
         $this->em->persist($user);
         $this->em->flush();

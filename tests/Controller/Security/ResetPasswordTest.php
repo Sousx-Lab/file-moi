@@ -21,37 +21,36 @@ final class ResetPasswordTest extends WebTestCase
 
     private const LOGIN_ROUTE =  "route_login";
 
-    private KernelBrowser $client;
+    private static ?KernelBrowser $client = null;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-        $this->client->enableProfiler();
+        if (null === self::$client)
+            self::$client = static::createClient();
     }
 
-    /**
-     * @return UrlGeneratorInterface
-     */
-    public function UrlGenerator(): UrlGeneratorInterface
+    public function UrlGenerator(string $route): string
     {
-        return $this->client->getContainer()->get('router');
+        /**@var UrlGeneratorInterface */
+        $router = self::$client->getContainer()->get('router');
+        return $router->generate($route);
     }
 
     public function getPassworResetForm(): Crawler
     {
-        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::RESET_PASS_ROUTE));
+        $crawler = self::$client->request('GET', $this->UrlGenerator(self::RESET_PASS_ROUTE));
         return $crawler->filter('form[name=password_reset_form]');
     }
 
     public function test_ForgotPasswordRoute(): void
     {
-        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::LOGIN_ROUTE));
+        $crawler = self::$client->request('GET', $this->UrlGenerator(self::LOGIN_ROUTE));
 
         $link = $crawler->selectLink('Forgot password')->link();
-        $this->client->click($link);
-        $this->client->followRedirects();
+        self::$client->click($link);
+        self::$client->followRedirects();
         $this->assertResponseIsSuccessful();
-        $this->assertEquals($this->client->getRequest()->getPathInfo(), '/password/reset');
+        $this->assertEquals(self::$client->getRequest()->getPathInfo(), '/password/reset');
     }
 
     public function test_PasswordResetFormEmailField(): void
@@ -69,8 +68,8 @@ final class ResetPasswordTest extends WebTestCase
                 'email' => "fake@email.com"
             ]);
 
-        $this->client->submit($form);
-        $this->assertRegExp('/User not found./', $this->client->getResponse()->getContent());
+        self::$client->submit($form);
+        $this->assertMatchesRegularExpression('/User not found./', self::$client->getResponse()->getContent());
     }
 
     public function test_OngoingPasswordReset(): void
@@ -85,8 +84,8 @@ final class ResetPasswordTest extends WebTestCase
             ->form([
                 'email' => $user->getEmail(),
             ]);
-        $this->client->submit($form);
-        $this->assertRegExp('/Ongoing password reset./', $this->client->getResponse()->getContent());
+        self::$client->submit($form);
+        $this->assertMatchesRegularExpression('/Ongoing password reset./', self::$client->getResponse()->getContent());
     }
 
     public function test_PasswordResetGoodEmail(): void
@@ -98,10 +97,10 @@ final class ResetPasswordTest extends WebTestCase
             ->form([
                 'email' => $user['user_user']->getEmail(),
             ]);
-        $this->client->submit($form);
+        self::$client->submit($form);
 
-        $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
-        $this->client->followRedirect();
+        $this->assertResponseRedirects($this->UrlGenerator(self::LOGIN_ROUTE));
+        self::$client->followRedirect();
     }
 
     public function test_UpdatePasswordWithBadTokenOrUserId(): void
@@ -113,7 +112,7 @@ final class ResetPasswordTest extends WebTestCase
         /**@var PasswordResetToken */
         $token = $fixtures['token_token'];
 
-        $this->client->request('GET', $this->UrlGenerator()->generate(
+        self::$client->request('GET', $this->UrlGenerator(
             self::UPDATE_PASS_ROUTE,
             [
                 'id' => $user->getId(),
@@ -121,10 +120,10 @@ final class ResetPasswordTest extends WebTestCase
             ]
         ));
         $this->assertResponseRedirects('/login');
-        $this->client->followRedirect();
-        $this->assertStringContainsString('This token is expired', $this->client->getResponse()->getContent());
+        self::$client->followRedirect();
+        $this->assertStringContainsString('This token is expired', self::$client->getResponse()->getContent());
 
-        $this->client->request('GET', $this->UrlGenerator()->generate(
+        self::$client->request('GET', $this->UrlGenerator(
             self::UPDATE_PASS_ROUTE,
             [
                 'id' => 'a73d1c0d-18eb-4e2a-9927-2dfa26802df2',
@@ -144,7 +143,7 @@ final class ResetPasswordTest extends WebTestCase
         /**@var PasswordResetToken */
         $token = $fixtures['token_token'];
 
-        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(
+        $crawler = self::$client->request('GET', $this->UrlGenerator(
             self::UPDATE_PASS_ROUTE,
             [
                 'id' => $user->getId(),
@@ -158,9 +157,9 @@ final class ResetPasswordTest extends WebTestCase
                 'confirmPassword' => 'NewPassword123'
             ]);
 
-        $this->client->submit($form);
-        $this->assertResponseRedirects($this->UrlGenerator()->generate(self::LOGIN_ROUTE));
-        $this->client->followRedirect();
-        $this->assertStringContainsString('Your password has been updated successfuly', $this->client->getResponse()->getContent());
+        self::$client->submit($form);
+        $this->assertResponseRedirects($this->UrlGenerator(self::LOGIN_ROUTE));
+        self::$client->followRedirect();
+        $this->assertStringContainsString('Your password has been updated successfuly', self::$client->getResponse()->getContent());
     }
 }

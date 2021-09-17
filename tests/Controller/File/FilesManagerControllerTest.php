@@ -15,24 +15,26 @@ final class FilesManagerControllerTest extends WebTestCase
     
     private const LOGIN_ROUTE = "route_login";
     
-    private KernelBrowser $client;
+    private static ?KernelBrowser $client = null;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
+        if (null === self::$client) {
+            self::$client = static::createClient();
+        }
     }
 
     public function UrlGenerator(string $route, array $params = [], int $path = 1 ): string
     {
         /**@var UrlGeneratorInterface */
-        $router = $this->client->getContainer()->get('router');
+        $router = self::$client->getContainer()->get('router');
         return $router->generate($route, $params, $path);
     }
 
     public function test_ForbiddenRedirectToLogin(): void
     {    
-        $this->client->request('GET', $this->UrlGenerator(self::MY_FILES_ROUTE));
-        $this->client->followRedirects();
+        self::$client->request('GET', $this->UrlGenerator(self::MY_FILES_ROUTE));
+        self::$client->followRedirects();
         $this->assertResponseRedirects($this->UrlGenerator(self::LOGIN_ROUTE));
     }
 
@@ -43,15 +45,15 @@ final class FilesManagerControllerTest extends WebTestCase
         /**@var User */
         $user = $fixtures['user_has_file'];
 
-        $this->login($this->client, $user);
-        $this->client->request('GET', $this->UrlGenerator(self::MY_FILES_ROUTE));
+        $this->login(self::$client, $user);
+        self::$client->request('GET', $this->UrlGenerator(self::MY_FILES_ROUTE));
 
         $this->assertResponseIsSuccessful();
-        $this->assertRegExp('/My files/', $this->client->getResponse()->getContent());
+        $this->assertMatchesRegularExpression('/My files/', self::$client->getResponse()->getContent());
 
         $files = $user->getFiles()->getValues();
         foreach ($files as $file) {
-            $this->assertRegExp("/{$file->getFileName()}/", $this->client->getResponse()->getContent());
+            $this->assertMatchesRegularExpression("/{$file->getFileName()}/", self::$client->getResponse()->getContent());
         }
         
     }

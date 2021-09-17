@@ -16,7 +16,7 @@ trait FileGenerator {
         for ($i = 0; $i < $num; $i++) {
             file_put_contents(
                 dirname(__DIR__) . "/File/files/testFile{$i}.txt",
-                'This file is created automatically when run UploadedControllerTest'
+                'This file is created automatically when run HomeControllerTest'
             );
             $files[] = new UploadedFile(dirname(__DIR__) . "/File/files/testFile{$i}.txt", "testFile{$i}", 'text/plain');
         }

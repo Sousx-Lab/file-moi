@@ -16,29 +16,30 @@ final class LoginTest extends WebTestCase
     use FixturesTrait;
     use NeedLogin;
 
-    private KernelBrowser $client;
+    private static ?KernelBrowser $client = null;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
+        if(null === self::$client)
+        self::$client = static::createClient();
     }
 
     public function UrlGenerator(string $route): string
     {
         /**@var UrlGeneratorInterface */
-        $router = $this->client->getContainer()->get('router');
+        $router = self::$client->getContainer()->get('router');
         return $router->generate($route);
     }
 
     public function test_LoginPageRoute(): void
     {
-        $this->client->request('GET', $this->urlGenerator(self::LOGIN_ROUTE));
+        self::$client->request('GET', $this->urlGenerator(self::LOGIN_ROUTE));
         $this->assertResponseIsSuccessful();
     }
 
     public function test_LoginFormFields(): void
     {
-        $crawler = $this->client->request('GET', $this->UrlGenerator(self::LOGIN_ROUTE));
+        $crawler = self::$client->request('GET', $this->UrlGenerator(self::LOGIN_ROUTE));
         
         $emailField = $crawler->filter('form[name=login_form]')
             ->filter('input[type=email]')
@@ -58,57 +59,57 @@ final class LoginTest extends WebTestCase
 
     public function test_TryLoginWithoutCredentials(): void
     {
-        $crawler = $this->client->request('GET', $this->UrlGenerator(self::LOGIN_ROUTE));
+        $crawler = self::$client->request('GET', $this->UrlGenerator(self::LOGIN_ROUTE));
         $form = $crawler->selectButton('Sign in')
             ->form([
                 'email' => " ",
                 'password' => " ",
             ]);
-        $this->client->submit($form);
+        self::$client->submit($form);
         
         $this->assertResponseRedirects($this->UrlGenerator(self::LOGIN_ROUTE));
-        $this->client->followRedirect();
-        $this->assertRegExp('/Invalid credentials./', $this->client->getResponse()->getContent());
+        self::$client->followRedirect();
+        $this->assertMatchesRegularExpression('/Invalid credentials./', self::$client->getResponse()->getContent());
     }
 
     public function test_TryLoginWithBadCredentials(): void
     {
-        $crawler = $this->client->request('GET', $this->UrlGenerator(self::LOGIN_ROUTE));
+        $crawler = self::$client->request('GET', $this->UrlGenerator(self::LOGIN_ROUTE));
         $form = $crawler->selectButton('Sign in')
             ->form([
                 'email' => "emailTest@email.fr",
                 'password' => "PasswordTest",
             ]);
-        $this->client->submit($form);
+        self::$client->submit($form);
 
         $this->assertResponseRedirects($this->UrlGenerator(self::LOGIN_ROUTE));
-        $this->client->followRedirect();
-        $this->assertRegExp('/Invalid credentials./', $this->client->getResponse()->getContent());
+        self::$client->followRedirect();
+        $this->assertMatchesRegularExpression('/Invalid credentials./', self::$client->getResponse()->getContent());
     }
 
     public function test_LoginWhitGoodCredentials(): void
     {
         $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
-        $csrfToken = $this->client->getContainer()->get('security.csrf.token_manager')->getToken('authenticate');
-        $this->client->request('POST', $this->UrlGenerator(self::LOGIN_ROUTE), [
+        $csrfToken = self::$client->getContainer()->get('security.csrf.token_manager')->getToken('authenticate');
+        self::$client->request('POST', $this->UrlGenerator(self::LOGIN_ROUTE), [
             'csrf_token' => $csrfToken,
             'email' => 'john@doe.fr',
             'password' => '0000',
         ]);
         $this->assertResponseRedirects("");
-        $this->client->followRedirect();
+        self::$client->followRedirect();
 
-        $this->assertRegExp('/john@doe.fr/', $this->client->getResponse()->getContent());
+        $this->assertMatchesRegularExpression('/john@doe.fr/', self::$client->getResponse()->getContent());
     }
 
     public function test_LogoutRoute(): void
     {
         $user = $this->loadFixtureFiles([dirname(__DIR__, 1). '/users.yaml']);
-        $this->login($this->client, $user['user_user']);
-        $this->client->request('GET', $this->UrlGenerator(self::LOGOUT_ROUTE));
+        $this->login(self::$client, $user['user_user']);
+        self::$client->request('GET', $this->UrlGenerator(self::LOGOUT_ROUTE));
 
         $this->assertResponseRedirects();
-        $this->assertNull($this->client->getContainer()->get('security.token_storage')->getToken());
+        $this->assertNull(self::$client->getContainer()->get('security.token_storage')->getToken());
     }
 
 }

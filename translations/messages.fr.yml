@@ -21,7 +21,8 @@ Confirm password: "Confirmez votre mot de passe :"
 Confirm your password: Veuillez entrer le mème mot passe
 Update Password: Changez votre mot depasse
 My files: Mes fichiers
-The file size exceeds the allowed limit of %maxSize%: La taille du fichier dépasse la limite autorisée de %maxSize%
+The file size exceeds the allowed limit of {{ limit }} {{ suffix }}: La taille du fichier dépasse la limite autorisée de {{ limit }} {{ suffix }}
+No file has been uploaded: Aucun fichier n'a été télécharger
 Download: Téléchargez
 Add file to my list: Ajoutez à ma liste.
 The file has been added to your list : Le fichier a bien été ajouté à votre liste.

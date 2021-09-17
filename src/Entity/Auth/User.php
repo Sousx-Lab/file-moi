@@ -2,23 +2,24 @@
 
 namespace App\Entity\Auth;
 
-use App\Entity\File\File;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
+use App\Entity\File\File;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\Auth\UserRepository;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="L'adresse ne peux pas étre utilisée")
  * @ORM\HasLifecycleCallbacks()
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @var \Ramsey\Uuid\UuidInterface
@@ -93,6 +94,9 @@ class User implements UserInterface
     public function getId(): string
     {
         return $this->id;
+    }
+    public function getUserIdentifier(){
+
     }
 
     public function getEmail(): ?string
