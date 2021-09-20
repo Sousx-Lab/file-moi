@@ -18,7 +18,7 @@ final class SignUpTest extends WebTestCase
 
     private const REGISTRATION_ROUTE = "route_registration";
 
-    private KernelBrowser $client;
+    private static ?KernelBrowser $client = null;
 
     private EntityManagerInterface $em;
 
@@ -28,33 +28,33 @@ final class SignUpTest extends WebTestCase
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-        $this->em = self::$container->get('doctrine.orm.default_entity_manager');
+        self::$client = static::createClient();
+        $this->em = static::getContainer()->get('doctrine.orm.default_entity_manager');
         $purger = new ORMPurger($this->em);
         $purger->purge();
     }
 
     public function UrlGenerator()
     {
-        return $this->client->getContainer()->get('router');
+        return static::getContainer()->get('router');
     }
 
     public function test_RegistrationPageRoute(): void
     {
-        $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
+        self::$client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
 
         $this->assertResponseIsSuccessful();
     }
 
     public function getRegistrationForm(): Crawler
     {
-        $crawler = $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
+        $crawler = self::$client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
         return $crawler->filter('form[name=registration]');
     }
 
     public function test_RegistrationFormFields(): void
     {
-        $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
+        self::$client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
 
         $form = $this->getRegistrationForm()->matches('form[name=registration]');
         $this->assertTrue($form);
@@ -84,12 +84,12 @@ final class SignUpTest extends WebTestCase
     {
 
         $user = $this->loadFixtureFiles([dirname(__DIR__, 1) . '/users.yaml']);
-        $this->login($this->client, $user['user_user']);
+        $this->login(self::$client, $user['user_user']);
         
-        $this->client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
+        self::$client->request('GET', $this->UrlGenerator()->generate(self::REGISTRATION_ROUTE));
         $this->assertResponseRedirects("/");
-        $this->client->followRedirect();
-        $this->assertRegExp('/You are already logged in as much as : John1/', $this->client->getResponse()->getContent());
+        self::$client->followRedirect();
+        $this->assertMatchesRegularExpression('/You are already logged in as much as : John1/', self::$client->getResponse()->getContent());
     }
 
     public function test_UserNotificationMessageDispatched(): void
@@ -101,13 +101,13 @@ final class SignUpTest extends WebTestCase
                 'password' => 'Password1',
                 'confirmPassword' => 'Password1'
             ], 'POST');
-        $this->client->submit($form);
+        self::$client->submit($form);
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => 'john@doe.fr']);
 
         $this->assertInstanceOf(User::class, $user);
 
         /**@var InMemoryTransport $transport */
-        $transport = self::$container->get('messenger.transport.async');
+        $transport = self::getContainer()->get('messenger.transport.async');
 
         $this->assertCount(1, $transport->get());
     }

@@ -19,9 +19,7 @@ final class DownloadControllerTest extends WebTestCase
 
     protected function setUp(): void
     {
-        if (null === self::$client) {
-            self::$client = static::createClient();
-        }
+        self::$client = static::createClient();
     }
 
     public function UrlGenerator(string $route, array $params = [], int $path = 1 ): string

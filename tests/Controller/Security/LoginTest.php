@@ -20,7 +20,6 @@ final class LoginTest extends WebTestCase
 
     protected function setUp(): void
     {
-        if(null === self::$client)
         self::$client = static::createClient();
     }
 

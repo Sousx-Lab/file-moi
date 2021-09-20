@@ -25,15 +25,14 @@ final class ResetPasswordTest extends WebTestCase
 
     protected function setUp(): void
     {
-        if (null === self::$client)
-            self::$client = static::createClient();
+        self::$client = static::createClient();
     }
 
-    public function UrlGenerator(string $route): string
+    public function UrlGenerator(string $route, array $params = []): string
     {
         /**@var UrlGeneratorInterface */
         $router = self::$client->getContainer()->get('router');
-        return $router->generate($route);
+        return $router->generate($route, $params);
     }
 
     public function getPassworResetForm(): Crawler
