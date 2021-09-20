@@ -19,6 +19,7 @@
     "watch": "parcel watch ./assets/js/app.js --dist-dir public/assets/"
   },
   "dependencies": {
+    "@grafikart/drop-files-element": "^1.0.9",
     "@hotwired/turbo": "^7.0.0-rc.4"
   },
   "devDependencies": {

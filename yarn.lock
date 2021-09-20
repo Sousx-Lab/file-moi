@@ -221,6 +221,11 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
+"@grafikart/drop-files-element@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@grafikart/drop-files-element/-/drop-files-element-1.0.9.tgz#6dbf1353d675c925cdeaf0f137a20681caa7e0e5"
+  integrity sha512-Eo2T8bQ30plnT+FOPW8xtGhe6+qDdbhT1IOeA0G18AiSI8nJF9LlmyZLh+PSy6UUnv3+6TMa3QOQIo/zroJQ4g==
+
 "@hotwired/turbo@^7.0.0-rc.4":
   version "7.0.0-rc.4"
   resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.0.0-rc.4.tgz#d3ab9555544534f5ec649613553e72ff6c7d7122"

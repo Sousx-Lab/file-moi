@@ -5,6 +5,8 @@
 		{{ form_widget(form.files, {
             'attr': {
             'class': 'form-control' ~ (form.files.vars.valid ? ' ' : ' is-invalid'),
+			'is': 'drop-files',
+			'label': "Drop files here or click to upload." | trans([], 'messages'),
             }}) 
 		}}
 		{% if form_errors(form.files) %}
