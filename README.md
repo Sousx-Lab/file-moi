@@ -6,18 +6,28 @@ A free project to share files, inspired by zippyshare.com
 
 ![file-share.jpg](https://i.postimg.cc/nzkG2GmG/file-share.jpg)
 
-## Deployment
+## Install
 
-Installing dependencies:
+Install dependencies:
 
 ```bash
   composer install
 ```
+Docker: 
 ##### This project uses Mysql database and MailHog to emulate an smtp server.
 You can edit the **docker-compose.yml** file to change the database password and username.
 This command also installs **Adminer**, you can remove it if you don't want to use it.
+
 ```bach
   docker-compose up
+```
+Javascript:
+install & run javascript dev server 
+```bach
+  npm install
+```
+```bach
+  npm watch
 ```
 ### Environment Variables:
 
